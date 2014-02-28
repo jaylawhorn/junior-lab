@@ -85,24 +85,25 @@
 \affiliation{MIT Department of Physics}
 
 \begin{abstract}
-We propose an experiment to measure the angular dependence of the flux of cosmic ray muons. This experiment expands on the 8.13 cosmic ray muon experiment, which assumes that the flux varies with $\cos^2(\theta)$, where $\theta$ is the incidence angle measured from the vertical. We describe how to test that assumption using a precision scintillator setup provided by Prof.\ Ulrich Becker. \textbf{[Jay, can you add more abstract-appropriate details about your sections here?]}
+We will measure the zenith angle dependence of the cosmic ray muon flux using a pair of scintillator counters with photomultiplier tube readouts on opposing ends and the coincidence method. The angular dependence is known to go approximately with $\cos^2(\theta)$, where $\theta$ is measured from the zenith angle. We will test this prediction and make a measurement of the total cosmic ray muon rate.
 \end{abstract}
 
 \maketitle
 
 \section{Scientific Motivation}
 
-The interaction of cosmic rays with particles in the upper atmosphere produces showers of muons, charged particles with masses intermediate between those of electrons and protons. These muons travel towards the Earth at near-light speeds; they are able to reach earth due to relativistic time dilation of their lifetime. Because their non-dilated mean lifetime is far too short for them to reach earth, the detection of cosmic ray muons is often used as a simple demonstration of basic relativistic concepts. Cosmic ray muons are also used in high energy physics experiments because they have higher energies than particles that can be produced from particle accelerators.
+The interaction of cosmic rays with particles in the upper atmosphere produces secondary showers of highly energetic particles, including neutrons, charged pions, and kaons. As shown in Figure \ref{fig:muon_shower}, the pions can then decay into muons. The muon's mean lifetime is approximately 2.2 $\mu$s in its rest frame, but relativistic effects on high energy muons such as those produced by cosmic rays allow them to easily penetrate the atmosphere and some distance into the earth.
 
-%\begin{figure}[htb]
-%\includegraphics[width=7cm]{muon_shower.png}
-%\caption{Figure showing the production of muons and other particles from cosmic rays. Adopted from\cite{grieder}.}
-%\label{fig:muon_shower}
-%\end{figure}
 
-Figure \ref{fig:muon_shower} shows a schematic of a typical process that produces muons. Cosmic rays, consisting mostly of protons, interact with particles in the upper atmosphere, producing a mixture of elementary particles consisting mostly of pions. These pions decay into a variety of other particles, including the muons that will be detected by our experimental apparatus. In their rest frame, muons have a mean lifetime of about 2.2 $\mu$s and a rest mass of about 105 MeV. In the Earth's frame, cosmic ray muons have a typical energy of around 4 GeV once they reach sea level, indicating that they are moving at highly relativistic speeds.
+The Cosmic Ray Muon experiment in 8.13 measures the velocity of cosmic ray muons via time of flight measurements and their mean lifetime. The combination of these two measurements provide evidence for relativistic time dilation. The apparatus for that experiment consists of two large rectangular scintillating paddles with photomultiplier tube (PMT) read out on each. 
 
-One experiment in 8.13 finds the velocity of cosmic ray muons via time of flight measurements and their mean lifetime by decay measurements, combining them to conclude that muons must be heavily time dilated. The apparatus in this experiment accepts muons from a variety of incidence angles, and so the analysis requires knowing the angular distribution of incoming muons. 8.13 students generally assume that the distribution follows a $\cos^2(\theta)$ dependence on incident zenith angle, but does not depend on azimuthal angle. This dependence is generally accepted by sources such as \cite{pdg}, but we intend to verify it experimentally.
+\begin{figure}[htb]
+\includegraphics[width=7cm]{muon_shower.png}
+\caption{Figure showing the production of muons and other particles from cosmic rays. From\cite{grieder}.}
+\label{fig:muon_shower}
+\end{figure}
+
+It has extremely poor resolution for the point of interaction, so the acceptance calculation is generally made over the expected zenith angle distribution of the cosmic ray muons, which is given as a $\cos^2(\theta)$ dependence. This dependence is generally accepted by sources such as \cite{pdg}, but we intend to verify it experimentally.
 
 \section{Hypothesis}
 
@@ -111,13 +112,19 @@ This problem was previously tackled in an undergraduate thesis by MIT student Yi
 \label{eqn:cosn}
 I(\theta,X_h,E)=I(0^\circ)\cos^{n(E,X_h)}(\theta),
 \end{equation}
-where $X_h$ is the vertical depth and $\Lambda$ is the attenuation length of a particle passing through matter. Like Kuo, we expect to confirm the result that $n(E,X_h)=2$ for the muons that interest us (\emph{i.e.}, those with energies on the order of a few GeV). Kuo also found that the muon flux did not attenuate precisely to zero at angles of $\pm90^\circ$, but rather exhibited small residual ``tails.'' Since our experimental setup will be very similar to his, we anticipate finding this result as well.
+where $X_h$ is the vertical depth. Like Kuo, we expect to confirm the result that $n(E,X_h)=2$ for the muons that interest us (\emph{i.e.}, those with energies on the order of a few GeV). Kuo also found that the muon flux did not attenuate precisely to zero at angles of $\pm90^\circ$, but rather exhibited small residual ``tails.'' Since our experimental setup will be very similar to his, we anticipate finding this result as well.
 
 \section{Experiment}
 
 \subsection{Apparatus}
 
-We will use a pair of AMS scintillator counters, each of which consists of a long and narrow piece of scintillating material with a triad of photomultiplier tubes (PMT) at each end. We will read out each set of PMTs by oscilliscope.
+We will use a pair of AMS scintillator counters, each of which consists of a long and narrow piece of scintillating material with a triad of PMTs at each end. We will read out each set of PMTs by oscilliscope. The apparatus itself is shown in Figure \ref{fig:app}.
+
+\begin{figure}[htb]
+\includegraphics[width=7cm]{apparatus.JPG}
+\caption{The two vertical bars each enclose one scintillator counter, with four total PMT readouts located on each end of the vertical bars.}
+\label{fig:apparatus}
+\end{figure}
 
 The scintillation light produced by a muon interacting with the material will propagate and be detected at each end, and the time difference between detection at each end allows reconstruction of the point of interaction. Using a pair of these counters will allow us to reconstruct a flight path for each muon and ultimately an angle of incidence.
 
