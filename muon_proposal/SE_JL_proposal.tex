@@ -92,10 +92,9 @@ We will measure the zenith angle dependence of the cosmic ray muon flux using a 
 
 \section{Scientific Motivation}
 
-The interaction of cosmic rays with particles in the upper atmosphere produces secondary showers of highly energetic particles, including neutrons, charged pions, and kaons. As shown in Figure \ref{fig:muon_shower}, the pions can then decay into muons. The muon's mean lifetime is approximately 2.2 $\mu$s in its rest frame, but relativistic effects on high energy muons such as those produced by cosmic rays allow them to easily penetrate the atmosphere and some distance into the earth.
+The interaction of cosmic rays with particles in the upper atmosphere produces secondary showers of highly energetic particles, including neutrons, charged pions, and kaons. As shown in Figure \ref{fig:muon_shower}, many of the pions then decay into muons. The muon's mean lifetime is approximately 2.2 $\mu$s in its rest frame, but relativistic effects on high energy muons such as those produced in secondary showers allow them to easily penetrate the atmosphere and even some distance into the earth.
 
-
-The Cosmic Ray Muon experiment in 8.13 measures the velocity of cosmic ray muons via time of flight measurements and their mean lifetime. The combination of these two measurements provide evidence for relativistic time dilation. The apparatus for that experiment consists of two large rectangular scintillating paddles with photomultiplier tube (PMT) read out on each. 
+The Cosmic Ray Muon experiment \cite{spatrick} measures the velocity of cosmic ray muons via time of flight measurements and their mean lifetime. The combination of these two measurements provide evidence for relativistic time dilation. The apparatus for that experiment consists of two large rectangular scintillating paddles with one photomultiplier tube (PMT) read out per paddle. 
 
 \begin{figure}[htb]
 \includegraphics[width=7cm]{muon_shower.png}
@@ -103,16 +102,19 @@ The Cosmic Ray Muon experiment in 8.13 measures the velocity of cosmic ray muons
 \label{fig:muon_shower}
 \end{figure}
 
-It has extremely poor resolution for the point of interaction, so the acceptance calculation is generally made over the expected zenith angle distribution of the cosmic ray muons, which is given as a $\cos^2(\theta)$ dependence. This dependence is generally accepted by sources such as \cite{pdg}, but we intend to verify it experimentally.
+It has extremely poor resolution for the point of interaction, so the acceptance calculation is generally made over the expected zenith angle distribution of the cosmic ray muons, which is given as a $\cos^2(\theta)$ dependence in the lab guide \cite{spatrick}. 
+
+This $\cos^2(\theta)$ dependence is given in the cosmic ray PDG review \cite{pdg} as valid for muons with energies near 3 GeV, with lower energy components exhibiting steeper distributions and high energy components that approaches $\sec(\theta)$.
 
 \section{Hypothesis}
 
-This problem was previously tackled in an undergraduate thesis by MIT student Yi-Hong Kyo.\cite{kuo} Kuo's  thesis cites the following formula for the angular dependence of muon flux:
+We expect to find a zenith angle distribution that follows:
 \begin{equation}
 \label{eqn:cosn}
-I(\theta,X_h,E)=I(0^\circ)\cos^{n(E,X_h)}(\theta),
-\end{equation}
-where $X_h$ is the vertical depth. Like Kuo, we expect to confirm the result that $n(E,X_h)=2$ for the muons that interest us (\emph{i.e.}, those with energies on the order of a few GeV). Kuo also found that the muon flux did not attenuate precisely to zero at angles of $\pm90^\circ$, but rather exhibited small residual ``tails.'' Since our experimental setup will be very similar to his, we anticipate finding this result as well.
+I(\theta)=I(0^\circ)\cos^{n}(\theta),
+\end{equation} 
+
+where $n$ is a function of momentum. \cite{grieson}.
 
 \section{Experiment}
 
@@ -138,7 +140,9 @@ In order to find the angular dependence distribution, we will take data using th
 
 \section{Expected Results}
 
-We expect to acquire an angular distribution of the incident muons in line with previous measurements going as $\cos^2(\theta)$ with some edge effects. We also expect to make a measurement of the detector efficiency of the scintillator paddles. 
+Previous work on this problem using a similar setup\cite{kuo} indicates that we will measure a spectrum substantially similar to a $\cos^2(\theta)$ dependence. However, this work found that for angles near $\pm90^\circ$ the muon flux does not go to zero, instead exhibiting small residual ``tail." 
+
+We expect to acquire an angular distribution of the incident muons in line with previous measurements, and a measurement of the exact value of $n$. Values given in \cite{grieson} suggest as well as the previous work by Kuo \cite{kuo} suggest that $n$ will be near 2.0. We also expect to make a measurement of the detector efficiency of the scintillator paddles. 
 
 \section{Required Materials}
 

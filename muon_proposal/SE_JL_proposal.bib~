@@ -29,15 +29,42 @@
     publisher={McGraw-Hill},
     year={2003}}
 
-@MISC{spatrick,
-        author = {S. Robinson},
-        title = {The Speed and Mean Life of Cosmic-Ray Muons (Lab Guide)},
-        year={2013}}
+@MISC{pritchard1990,
+        author = {D. Pritchard},
+        title = {Junior Lab Written Report Notes},
+        year={1990}}
+
+@ARTICLE{feynman1982,
+    author={R.P. Feynman},
+    title={Simulating physics with computers},
+    journal={Int. J. Theor. Phys.},
+    volume={21},
+    pages={467-469},
+    year={1982},
+        number={16},
+        month={May},
+        url={www.aps.org},
+        note={JLab E-Library}}
+
+@BOOK{mayfield1998,
+    author={Leslie C. Perelman, James Paradis and Edward Barrett},
+    title={The Mayfield Handbook of Technical and Scientific Writing},
+    publisher={Mayfield},
+    url = {https://web.mit.edu/21.guide/www/home.htm},
+    year={1998}}
+
+@MISC{owc,
+   title={MIT Online Writing Center},
+   url={http://web.mit.edu/writing/}}
 
 @ARTICLE{pdg,
-	author={Particle Data Group},
-	title={Cosmic Rays},
-	year={2011}}
+	author={C. Amsler and others},
+	title={Review of Particle Physics},
+	journal={Physics Letters B},
+	volume={667},
+	number={1-5},
+	pages={256},
+	year={2008}}
 
 @MISC{kuo,
 	author={Yi-Hong Kuo},
