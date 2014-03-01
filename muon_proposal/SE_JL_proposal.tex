@@ -90,8 +90,6 @@ We will measure the zenith angle dependence of the cosmic ray muon flux using a 
 
 \maketitle
 
-\section{Scientific Motivation}
-
 The interaction of cosmic rays with particles in the upper atmosphere produces secondary showers of highly energetic particles, including neutrons, charged pions, and kaons. As shown in Figure \ref{fig:muon_shower}, many of the pions then decay into muons. The muon's mean lifetime is approximately 2.2 $\mu$s in its rest frame, but relativistic effects on high energy muons such as those produced in secondary showers allow them to easily penetrate the atmosphere and even some distance into the earth.
 
 The Cosmic Ray Muon experiment \cite{spatrick} measures the velocity of cosmic ray muons via time of flight measurements and their mean lifetime. The combination of these two measurements provide evidence for relativistic time dilation. The apparatus for that experiment consists of two large rectangular scintillating paddles with one photomultiplier tube (PMT) read out per paddle. 
@@ -102,49 +100,32 @@ The Cosmic Ray Muon experiment \cite{spatrick} measures the velocity of cosmic r
 \label{fig:muon_shower}
 \end{figure}
 
-It has extremely poor resolution for the point of interaction, so the acceptance calculation is generally made over the expected zenith angle distribution of the cosmic ray muons, which is given as a $\cos^2(\theta)$ dependence in the lab guide \cite{spatrick}. 
+It has extremely poor resolution for the point of interaction, so the acceptance calculation is generally made over the expected zenith angle distribution of the cosmic ray muons, which is given as a $\cos^2(\theta)$ dependence. 
 
-This $\cos^2(\theta)$ dependence is given in the cosmic ray PDG review \cite{pdg} as valid for muons with energies near 3 GeV, with lower energy components exhibiting steeper distributions and high energy components that approaches $\sec(\theta)$.
-
-\section{Hypothesis}
-
-We expect to find a zenith angle distribution that follows:
+According to Grieder \cite{grieder}, the cosmic muon intensity as a function of zenith angle goes as 
 \begin{equation}
 \label{eqn:cosn}
 I(\theta)=I(0^\circ)\cos^{n}(\theta),
 \end{equation} 
+where $n$ is a function of momentum. Grieder gives measured values of $n$ ranging from 1.6 to 3.3 for various latitudes and momentum thresholds.
 
-where $n$ is a function of momentum. \cite{grieson}.
-
-\section{Experiment}
-
-\subsection{Apparatus}
+Previous work on this problem using a similar setup \cite{kuo} indicates that we will measure an $n$ value close to 2.0. However, this work found that for angles near $\pm90^\circ$ the muon flux does not go to zero, instead exhibiting a small residual ``tail." 
 
 We will use a pair of AMS scintillator counters, each of which consists of a long and narrow piece of scintillating material with a triad of PMTs at each end. We will read out each set of PMTs by oscilliscope. The apparatus itself is shown in Figure \ref{fig:app}.
 
 \begin{figure}[htb]
-\includegraphics[width=7cm]{apparatus.JPG}
-\caption{The two vertical bars each enclose one scintillator counter, with four total PMT readouts located on each end of the vertical bars.}
+\includegraphics[width=7cm]{apparatus2.JPG}
+\caption{(top) The two vertical bars each enclose one scintillator counter, with four total PMT readouts located on each end of the vertical bars. (bottom) Schematic of setup, with a muon path indicated. }
 \label{fig:apparatus}
 \end{figure}
 
 The scintillation light produced by a muon interacting with the material will propagate and be detected at each end, and the time difference between detection at each end allows reconstruction of the point of interaction. Using a pair of these counters will allow us to reconstruct a flight path for each muon and ultimately an angle of incidence.
-
-\subsection{Method}
 
 We will establish a working bias voltage for the PMTs by measuring the signal frequency as a function of bias voltage. If the bias voltage is too low, we will be losing events that we could otherwise detect. However, if the bias voltage is set too high, our signal will be dominated by amplified noise. We will set bias voltages for each PMT in the plateau between these two regimes.
 
 We will measure the counter detection efficiency by placing two smaller scintillator paddles directly above and below one of the scintillator counters and looking at events where the two smaller paddles register a hit. The percentage of these events in which the middle counter also registers a hit will allow us to calculate the efficiency of the middle counter independently of the efficiencies of the smaller paddles. This setup will also allow us to validate our reconstruction of the point of interaction in the scintillator counter to a certain extent, although the expected precision in point of interaction will likely be much smaller than the additional paddles.
 
 In order to find the angular dependence distribution, we will take data using the four PMT readouts in a series of long integration time runs, and reconstruct the flight path for each detected muon. The angle of incidence with respect to the azimuth can then be calculated. However, we will also need to take into account the geometric acceptance of the pair of scintillator counters, which we will model using a monte carlo simulation. If time permits, we will add detector effects and efficiencies to the simulation using either GEANT4 or a numerical integration scheme.
-
-\section{Expected Results}
-
-Previous work on this problem using a similar setup\cite{kuo} indicates that we will measure a spectrum substantially similar to a $\cos^2(\theta)$ dependence. However, this work found that for angles near $\pm90^\circ$ the muon flux does not go to zero, instead exhibiting small residual ``tail." 
-
-We expect to acquire an angular distribution of the incident muons in line with previous measurements, and a measurement of the exact value of $n$. Values given in \cite{grieson} suggest as well as the previous work by Kuo \cite{kuo} suggest that $n$ will be near 2.0. We also expect to make a measurement of the detector efficiency of the scintillator paddles. 
-
-\section{Required Materials}
 
 We will require the pair of AMS scintillator counters, a four-channel USB-capable osciliscope, and if possible, two similarly sized scintillator paddles to be used for efficiency measurements. We hope to borrow the osciliscope from junior lab, and all scintillators from Prof. Becker.
 
