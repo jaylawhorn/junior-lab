@@ -1,0 +1,110 @@
+#ifndef NMRFXNS_HH
+#define NMRFXNS_HH
+
+#include <TROOT.h>
+#include <TSystem.h>
+#include <TFile.h>
+#include <TMath.h>
+#include <TH1D.h>
+#include <TGraph.h>
+#include <TGraphErrors.h>
+#include <TLegend.h>
+#include <TStyle.h>
+#include <TString.h>
+#include <TCanvas.h>
+#include <TF1.h>
+#include <TProfile.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+
+void confParse(const TString    conf,      // input conf file                                                                       
+               vector<TString>  &fnamev,   // vector to store sample files                                                          
+               vector<Int_t>    &timev,    // vector to store sample times                                                          
+	       vector<TGraph*>  &graphv    // fector to store TGraphs
+               ) {
+
+  ifstream ifs;
+  ifs.open(conf.Data());
+  assert(ifs.is_open());
+  string line;
+  while(getline(ifs,line)) {
+    if(line[0]=='#') continue;
+
+    string fname;
+    Int_t time;
+    stringstream ss(line);
+    ss >> fname >> time;
+
+    fnamev.push_back(fname);
+    timev.push_back(time);
+    graphv.push_back(new TGraph());
+
+  }
+  ifs.close();
+}
+
+void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraph *gr_sel) {
+
+  TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
+
+  TGraph *gr_sig = new TGraph(filename, "%lg %lg", ",");
+  //TGraph *gr_pulse = new TGraph(filename, "%lg %*lg %lg", ",");
+
+  gr_sel->SetMarkerColor(kBlue);
+  gr_sig->Draw("al");
+
+  Double_t x, y;
+  Double_t temp;
+
+  Double_t min_x=-1, min_y=-1;
+  Double_t max_x=-1, max_y=-1;
+  Int_t j=0;
+
+  Double_t y_avg = gr_sig->GetMean(2);
+
+  for (Int_t i=0; i<gr_sig->GetN(); i++) {
+
+    gr_sig->GetPoint(i,x,y);
+
+    if ((y>y_avg) && (y>max_y)) {
+      max_y=y;
+      max_x=x;
+    }
+    if ((y<y_avg) && (y<min_y)) {
+      min_y=y;
+      min_x=x;
+    }
+    if ((y<y_avg) && (max_y!=-1)) {
+      gr_sel->SetPoint(j, max_x, max_y); 
+      j++; max_x=-1; max_y=-1;
+    }
+    if ((y>y_avg) && (min_y!=1)) {
+      gr_sel->SetPoint(j, min_x, min_y);
+      j++; min_x=1; min_y=1;
+
+    }
+
+  }
+
+  Double_t start_draw=0, end_draw=0;
+  gr_sel->GetPoint(1, start_draw, temp);
+  gr_sel->GetPoint(j-1, end_draw, temp);
+
+  cout << start_draw << " " << end_draw << endl;
+
+  gr_sig->GetXaxis()->SetRangeUser(start_draw-0.001, end_draw+0.001);
+  gr_sel->Draw("same p");
+
+  char outfile[50];
+
+  sprintf(outfile, "%s/t%.1f_%i.png",dir.Data(),tau,n);
+
+  c1->SaveAs(outfile);
+
+  delete c1;
+
+}
+#endif

@@ -1,0 +1,43 @@
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include <TROOT.h>
+#include <TSystem.h>
+#include <TFile.h>
+#include <TMath.h>
+#include <TH1D.h>
+#include <TGraph.h>
+#include <TGraphErrors.h>
+#include <TLegend.h>
+#include <TStyle.h>
+#include <TString.h>
+#include <TCanvas.h>
+#include <TLine.h>
+#include <TBox.h>
+#include <TF1.h>
+#include <TProfile.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+
+#include "nmrfxns.hh"
+#endif
+
+void test_water() {
+
+  TString conf="water_n2.txt";
+
+  vector<TString> fnamev;
+  vector<Int_t> timev;
+  vector<Double_t> maxv;
+  vector<TGraph*> graphv;
+
+  confParse(conf, fnamev, timev, graphv);
+
+  for (Int_t i=0; i<fnamev.size(); i++) {
+    
+    getPeaks(fnamev[i], timev[i], i, "water_n2", graphv[i]);
+
+  }
+
+}

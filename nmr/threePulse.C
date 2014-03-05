@@ -139,7 +139,7 @@ void getMax(const TString filename, Float_t tau, Int_t n, TProfile *final) {
 
   char outfile[50];
 
-  sprintf(outfile, "t%.0f_%i.png",tau,n);
+  sprintf(outfile, "images/t%.0f_%i.png",tau,n);
 
   c1->SaveAs(outfile);
 

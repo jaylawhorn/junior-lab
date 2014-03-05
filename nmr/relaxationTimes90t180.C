@@ -48,6 +48,6 @@ void relaxationTimes90t180() {
   grT2->GetYaxis()->SetTitle("Peak Value [mV]");
   grT2->Draw("ap");
 
-  c1->SaveAs("t2_90t180.png");
+  c1->SaveAs("images/t2_90t180.png");
 
 }

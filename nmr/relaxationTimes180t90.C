@@ -62,6 +62,6 @@ void relaxationTimes180t90() {
   grT1->GetYaxis()->SetTitle("Max Voltage [mV]");
   grT1->Draw("ap");
 
-  c1->SaveAs("t1_180t90.png");
+  c1->SaveAs("images/t1_180t90.png");
 
 }

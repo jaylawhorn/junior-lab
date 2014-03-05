@@ -59,6 +59,6 @@ void relaxationTimes90t90() {
 
   grT1->Draw("ap");
 
-  c1->SaveAs("t1_90t90.png");
+  c1->SaveAs("images/t1_90t90.png");
 
 }

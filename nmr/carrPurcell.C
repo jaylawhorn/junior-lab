@@ -81,6 +81,6 @@ void carrPurcell(const TString filename="data/Carr-Purcell_glycerine/cp4_2.csv")
   cout << endl;
   cout << -1000/fitfxn->GetParameter(2) << endl;
 
-  c1->SaveAs(filename(28,5)+TString(".png"));
+  c1->SaveAs(TString("images/"+filename(28,5)+TString(".png"));
 
 }

@@ -20,7 +20,7 @@
 #include <iostream>
 
 #endif
-void carrPurcell(const TString filename="data/Carr-Purcell_glycerine/cp2_2.csv") {
+void carrPurcell(const TString filename="data/Carr-Purcell_glycerine/cp4_2.csv") {
 
   TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
 
@@ -57,7 +57,7 @@ void carrPurcell(const TString filename="data/Carr-Purcell_glycerine/cp2_2.csv")
     }
     else if (start==kFALSE) continue;
     else if (temp<0.0025) continue;
-    else if ((count==kFALSE) && (tt<15)) {
+    else if ((count==kFALSE) && (tt<5)) {
       tt++;
     }
     else if (count==kFALSE) {
@@ -81,6 +81,6 @@ void carrPurcell(const TString filename="data/Carr-Purcell_glycerine/cp2_2.csv")
   cout << endl;
   cout << -1000/fitfxn->GetParameter(2) << endl;
 
-  c1->SaveAs(filename(28,5)+TString(".png"));
+  c1->SaveAs(TString("images/"+filename(28,5)+TString(".png"));
 
 }
