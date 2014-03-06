@@ -61,17 +61,20 @@ void threePulse() {
 
   TCanvas *c = new TCanvas("c", "c", 800, 600);
 
-  TF1 *t1fit = new TF1("t1fit", "[0]-expo(1)", 15, 65);
+  TF1 *t1fit = new TF1("t1fit", "[0]-expo(1)", 10, 65);
 
   moreFinal->Fit("t1fit", "R");
 
-  cout << endl;
-  cout << "T1 = " << -1.0/t1fit->GetParameter(2) << endl;
+  Float_t t1 = -1.0/t1fit->GetParameter(2);
+  Double_t uncert = max(fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))), fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))));
+
+  cout << fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))) << ", " << fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))) << endl;
+  cout << "T1 = " << -1.0/t1fit->GetParameter(2) << " +- " << uncert << endl;
 
   moreFinal->SetTitle("Three pulse");
   moreFinal->GetXaxis()->SetTitle("Tau [ms]");
   moreFinal->GetYaxis()->SetTitle("Max Voltage [mV]");
-  moreFinal->Draw();
+  moreFinal->Draw("ap");
 
   c->SaveAs("threePulse.png");  
 
@@ -128,14 +131,13 @@ void getMax(const TString filename, Float_t tau, Int_t n, TProfile *final) {
     }      
   }
 
-  //cout << filename(30,4) << endl;
   cout << tau << " " << max_x << " " << max_y << endl;
 
-  gr_sel->SetPoint(j,max_x, max_y);
+  gr_sel->SetPoint(j,1000*max_x, 1000*max_y);
 
   gr_sel->Draw("same p");
 
-  final->Fill(tau, max_y);
+  final->Fill(tau, 1000*max_y);
 
   char outfile[50];
 

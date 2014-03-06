@@ -1,0 +1,4 @@
+#filename				50%
+data/Viscosity_measurements/cp5_0.csv
+data/Viscosity_measurements/cp5_1.csv
+data/Viscosity_measurements/cp5_2.csv

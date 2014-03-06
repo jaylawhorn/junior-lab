@@ -41,21 +41,26 @@ void relaxationTimes90t90() {
     std[i] = (v1[i]*v1[i]+v2[i]*v2[i]+v3[i]*v3[i])/3.0;
     std[i] -= avg[i]*avg[i];
     std[i] = TMath::Sqrt(std[i]);
-    err[i] = TMath::Sqrt(std[i]*std[i]+1.1*1.1);
+    err[i] = TMath::Sqrt(std[i]*std[i]/3+1.1*1.1);
     cout << avg[i] << ", " << err[i] << endl;
   }
 
   TGraphErrors *grT1 = new TGraphErrors(n, times, avg, 0, err);
 
   TF1 *t1fit = new TF1("t1fit", "[0]-expo(1)", 0, 115);
+  t1fit->SetLineColor(kBlue);
 
   grT1->SetTitle("90-tau-90");
   grT1->GetXaxis()->SetTitle("tau [ms]");
   grT1->GetYaxis()->SetTitle("Peak Value [mV]");
   grT1->Fit("t1fit", "R");
 
-  cout << endl;
-  cout << "T1 = " << -1.0/t1fit->GetParameter(2) << endl;
+  Float_t t1 = -1.0/t1fit->GetParameter(2);
+  Double_t uncert = max(fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))), fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))));
+
+  cout << fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))) << ", " << fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))) << endl;
+  cout << "T1 = " << -1.0/t1fit->GetParameter(2) << " +- " << uncert << endl;
+
 
   grT1->Draw("ap");
 

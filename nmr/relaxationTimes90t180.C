@@ -37,11 +37,15 @@ void relaxationTimes90t180() {
   TGraphErrors *grT2 = new TGraphErrors(n, times, values, 0, uncert);
 
   TF1 *t2fit = new TF1("t2fit", "expo", 0, 30);
+  t2fit->SetLineColor(kBlue);
 
   grT2->Fit("t2fit");
 
-  cout << endl;
-  cout << "T2 = " << -1.0/t2fit->GetParameter(1) << endl;
+  Float_t t2 = -1.0/t2fit->GetParameter(1);
+  Double_t unc = max(fabs(t2+(1.0/(t2fit->GetParameter(1)+t2fit->GetParError(1)))), fabs(t2+(1.0/(t2fit->GetParameter(1)-t2fit->GetParError(1)))));
+
+  cout << fabs(t2+(1.0/(t2fit->GetParameter(1)+t2fit->GetParError(1)))) << ", " << fabs(t2+(1.0/(t2fit->GetParameter(1)-t2fit->GetParError(1)))) << endl;
+  cout << "T2 = " << -1.0/t2fit->GetParameter(1) << " +- " << unc << endl;
 
   grT2->SetTitle("90-tau-180");
   grT2->GetXaxis()->SetTitle("Tau [ms]");

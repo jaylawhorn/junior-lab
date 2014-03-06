@@ -44,7 +44,7 @@ void viscosity(TString conf="g70_180t90") {
   vector<Double_t> echo_ampv;
   vector<Double_t> echo_dampv;
   
-  for (Int_t i=0; i<1/*fnamev.size()*/; i++) {
+  for (Int_t i=0; i<fnamev.size(); i++) {
     
     getPeaks(fnamev[i], timev[i], i, conf, graphv[i]);
   
@@ -60,11 +60,6 @@ void viscosity(TString conf="g70_180t90") {
       graphv[i]->GetPoint(j, tx, ty);
       dy = graphv[i]->GetErrorY(j);
 
-      if ((conf=="water_o2") && (i<3)) {
-	if (tx<0.503) continue;
-      }
-      else if (tx<0.001) continue;
-      
       if (ty>echo_max) { 
 	echo_max=ty; 
 	echo_x=tx; 
@@ -78,8 +73,8 @@ void viscosity(TString conf="g70_180t90") {
       
     }
     
-    echo_amp = 0.5*(echo_max-echo_min);
-    d_echo_amp = TMath::Sqrt(echo_max_dy*echo_max_dy+echo_min_dy*echo_min_dy);
+    echo_amp = 0.5*(1000*echo_max-1000*echo_min);
+    d_echo_amp = 1000*TMath::Sqrt(echo_max_dy*echo_max_dy+echo_min_dy*echo_min_dy);
 
     echo_ampv.push_back(echo_amp);
     echo_dampv.push_back(d_echo_amp);
@@ -90,7 +85,7 @@ void viscosity(TString conf="g70_180t90") {
     cout << echo_amp << " " << d_echo_amp << endl;
 
   }
-  /*
+
   Double_t avg=0;
   Double_t stdev=0;
   Double_t uncert=0;
@@ -102,30 +97,31 @@ void viscosity(TString conf="g70_180t90") {
     avg=(echo_ampv[3*i]+echo_ampv[3*i+1]+echo_ampv[3*i+2])/3.0;
     stdev=TMath::Sqrt((echo_ampv[3*i]*echo_ampv[3*i]+echo_ampv[3*i+1]*echo_ampv[3*i+1]+echo_ampv[3*i+2]*echo_ampv[3*i+2])/3-avg*avg);
 
-    cout << timev[3*i] << " " << avg << " +- " << TMath::Sqrt(stdev*stdev+3*echo_dampv[3*i+1]*echo_dampv[3*i+1]) << endl;
+    cout << timev[3*i] << " " << avg << " +- " << TMath::Sqrt(stdev*stdev/3) << " or " << TMath::Sqrt(echo_dampv[i]*echo_dampv[i]/3) << endl;
 
-    uncert=TMath::Sqrt(stdev*stdev+3*echo_dampv[3*i+1]*echo_dampv[3*i+1])/TMath::Sqrt(3);
+    uncert=TMath::Sqrt(stdev*stdev/3);
+    //if (uncert < TMath::Sqrt(3*echo_dampv[i]*echo_dampv[i]/3)) uncert=TMath::Sqrt(echo_dampv[i]*echo_dampv[i]/3);
     
-    echo_height->SetPoint(i, timev[3*i], 1000*avg);
-    echo_height->SetPointError(i, 0, 1000*uncert);
+    echo_height->SetPoint(i, timev[3*i], avg);
+    echo_height->SetPointError(i, 0, uncert);
 
   }
 
   echo_height->SetTitle("");
-  echo_height->GetXaxis()->SetTitle("Repeat Time [s]");
+  echo_height->GetXaxis()->SetTitle("Repeat Time [ms]");
   echo_height->GetYaxis()->SetTitle("Spin Echo Amplitude [mV]");
-  echo_height->GetYaxis()->SetRangeUser(0, 20);
+  //echo_height->GetYaxis()->SetRangeUser(0, 20);
 
   TF1 *fitfxn = new TF1("fitfxn", "[0]-expo(1)", 0, 8.5);
   fitfxn->SetLineColor(kBlue);
 
   echo_height->Draw("ap");
 
-  echo_height->Fit("fitfxn");
+  echo_height->Fit("fitfxn", "E");
   
   Double_t nom_t1 = -1.0/fitfxn->GetParameter(2);
   Double_t d_t1 = TMath::Max(fabs(-1.0/(fitfxn->GetParameter(2)+fitfxn->GetParError(2))-nom_t1), fabs(-1.0/(fitfxn->GetParameter(2)-fitfxn->GetParError(2))-nom_t1));
 
   cout << "T1 = " << -1.0/fitfxn->GetParameter(2) << " +- " << d_t1 << endl;
-  */
+
 }

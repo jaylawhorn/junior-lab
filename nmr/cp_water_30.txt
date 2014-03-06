@@ -1,0 +1,4 @@
+# filename				30%
+data/Viscosity_measurements/cp3_0.csv	
+data/Viscosity_measurements/cp3_1.csv	
+data/Viscosity_measurements/cp3_2.csv	

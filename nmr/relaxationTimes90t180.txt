@@ -1,0 +1,10 @@
+
+Processing relaxationTimes90t180.C+...
+ FCN=9.57309 FROM MIGRAD    STATUS=CONVERGED      43 CALLS          44 TOTAL
+                     EDM=4.20547e-08    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Constant     4.28558e+00   8.96778e-03   9.30601e-06  -1.73791e-02
+   2  Slope       -1.09845e-01   1.68531e-03   1.74857e-06   9.11291e-02
+0.141851, 0.137563
+T2 = 9.10372 +- 0.141851

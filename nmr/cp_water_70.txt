@@ -1,0 +1,4 @@
+# filename				70%
+data/Viscosity_measurements/cp7_0.csv
+data/Viscosity_measurements/cp7_1.csv
+data/Viscosity_measurements/cp7_2.csv

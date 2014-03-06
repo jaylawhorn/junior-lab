@@ -72,15 +72,15 @@ void carrPurcell(const TString filename="data/Carr-Purcell_glycerine/cp4_2.csv")
       }
     }      
   }
-
+  
   gr_sel->Draw("same p");
-
-  TF1 *fitfxn = new TF1("fitfxn","[0]+[1]*exp([2]*x)", 0.0, 0.07);
+  
+  TF1 *fitfxn = new TF1("fitfxn","[0]-[1]*exp([2]*x)", 0.0, 0.07);
   gr_sel->Fit("fitfxn");
-
+  
   cout << endl;
   cout << -1000/fitfxn->GetParameter(2) << endl;
-
-  c1->SaveAs(TString("images/"+filename(28,5)+TString(".png"));
-
+  
+  c1->SaveAs(TString("images/")+filename(28,5)+TString(".png"));
+	     
 }
