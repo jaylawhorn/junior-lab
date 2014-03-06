@@ -20,9 +20,9 @@
 #include <iomanip>
 #include <iostream>
 
-void confParse(const TString    conf,      // input conf file                                                                       
-               vector<TString>  &fnamev,   // vector to store sample files                                                          
-               vector<Int_t>    &timev,    // vector to store sample times                                                          
+void confParse(const TString    conf,      // input conf file
+               vector<TString>  &fnamev,   // vector to store sample files
+               vector<Double_t> &timev,    // vector to store sample times
 	       vector<TGraphErrors*>  &graphv    // fector to store TGraphs
                ) {
 
@@ -34,7 +34,7 @@ void confParse(const TString    conf,      // input conf file
     if(line[0]=='#') continue;
 
     string fname;
-    Int_t time;
+    Double_t time;
     stringstream ss(line);
     ss >> fname >> time;
 
@@ -62,8 +62,11 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
 
   Bool_t start=kFALSE;
 
-  Double_t min_x=-1, min_y=-1;
+  Double_t min_x=1, min_y=1;
   Double_t max_x=-1, max_y=-1;
+
+  Double_t dx=0.4e-3;
+
   Int_t j=0;
 
   Double_t y_avg = gr_sig->GetMean(2);
@@ -90,10 +93,12 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
     }
     if ((y<y_avg) && (max_y!=-1)) {
       gr_sel->SetPoint(j, max_x, max_y); 
+      gr_sel->SetPointError(j,0,dx);
       j++; max_x=-1; max_y=-1;
     }
     if ((y>y_avg) && (min_y!=1)) {
       gr_sel->SetPoint(j, min_x, min_y);
+      gr_sel->SetPointError(j,0,dx);
       j++; min_x=1; min_y=1;
 
     }
@@ -103,8 +108,6 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
   Double_t start_draw=0, end_draw=0;
   gr_sel->GetPoint(1, start_draw, temp);
   gr_sel->GetPoint(j-1, end_draw, temp);
-
-  cout << start_draw << " " << end_draw << endl;
 
   gr_sig->GetXaxis()->SetRangeUser(start_draw-0.001, end_draw+0.001);
   gr_sel->Draw("same p");
