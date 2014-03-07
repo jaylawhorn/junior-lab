@@ -63,7 +63,7 @@ void relaxationTimes180t90() {
   cout << fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))) << ", " << fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))) << endl;
   cout << "T1 = " << -1.0/t1fit->GetParameter(2) << " +- " << uncert << endl; 
 
-  grT1->SetTitle("180-tau-90");
+  grT1->SetTitle("");
   grT1->GetXaxis()->SetTitle("Tau [ms]");
   grT1->GetYaxis()->SetTitle("Max Voltage [mV]");
   grT1->Draw("ap");

@@ -28,7 +28,7 @@
 
 void viscosity(TString conf="g70_180t90") {
 
-  TCanvas *c1 = MakeCanvas("c1", "c1", 800, 600);
+
 
   TGaxis::SetMaxDigits(3);
 
@@ -86,6 +86,8 @@ void viscosity(TString conf="g70_180t90") {
 
   }
 
+  TCanvas *c2 = MakeCanvas("c2", "c2", 800, 600);
+
   Double_t avg=0;
   Double_t stdev=0;
   Double_t uncert=0;
@@ -112,12 +114,12 @@ void viscosity(TString conf="g70_180t90") {
   echo_height->GetYaxis()->SetTitle("Spin Echo Amplitude [mV]");
   //echo_height->GetYaxis()->SetRangeUser(0, 20);
 
-  TF1 *fitfxn = new TF1("fitfxn", "[0]-expo(1)", 0, 8.5);
+  TF1 *fitfxn = new TF1("fitfxn", "[0]-expo(1)", 5, 105);
   fitfxn->SetLineColor(kBlue);
 
   echo_height->Draw("ap");
 
-  echo_height->Fit("fitfxn", "E");
+  echo_height->Fit("fitfxn", "ER");
   
   Double_t nom_t1 = -1.0/fitfxn->GetParameter(2);
   Double_t d_t1 = TMath::Max(fabs(-1.0/(fitfxn->GetParameter(2)+fitfxn->GetParError(2))-nom_t1), fabs(-1.0/(fitfxn->GetParameter(2)-fitfxn->GetParError(2))-nom_t1));

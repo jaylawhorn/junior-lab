@@ -26,7 +26,7 @@
 #include "nmrfxns.hh"
 #endif
 
-void cp_test(TString conf="cp_water_30") {
+void cp_test(TString conf="cp_water_70") {
 
   TCanvas *c1 = MakeCanvas("c1", "c1", 800, 600);
 
@@ -57,9 +57,9 @@ void cp_test(TString conf="cp_water_30") {
 	graphv[i]->RemovePoint(j-2);
 	graphv[i]->RemovePoint(j-2);
 
-      }
+	}
   }
-
+  
   TGraphErrors *extract = new TGraphErrors();
   Double_t max_x=-1, max_y=-1;
   Double_t min_x=1, min_y=1;
@@ -72,10 +72,12 @@ void cp_test(TString conf="cp_water_30") {
 
     if (tx<0.003) continue;
 
-    if (fabs(tx1-tx) >0.001) {
-
-      extract->SetPoint(k, 0.5*(max_x+min_x), 0.5*(max_y-min_y));
-      //extract->SetPointError(k, TMath::Sqrt(0.5*(min_x*max_x+min_x*max_x)-0.25*(max_x+min_x)*(max_x+min_x)), TMath::Sqrt(0.5*(2*0.4e-3*0.4e-3)-0.4e-3));
+    //if (fabs(tx1-tx) >0.001) {
+    if (fabs(tx1-tx) >0.0005) {
+      if (max_y==-1) continue;
+      cout << "hi" << endl;
+      extract->SetPoint(k, 0.5*1000*(max_x+min_x), 0.5*1000*(max_y-min_y));
+      extract->SetPointError(k, 0, TMath::Sqrt(0.5*(2*0.4*0.4)));
       k++;
 
       max_x=-1; max_y=-1;
@@ -92,8 +94,20 @@ void cp_test(TString conf="cp_water_30") {
      
   }
 
-  graphv[i]->Draw("ap");
+  //graphv[i]->Draw("ap");
   extract->SetMarkerColor(kRed);
-  extract->Draw("same p");
+  extract->SetTitle("");
+  extract->GetXaxis()->SetTitle("Tau [ms]");
+  extract->GetYaxis()->SetTitle("Spin Echo Height [mV]");
+  extract->Draw("ap");
 
+  TF1 *fitfxn = new TF1("fitfxn", "expo", 5, 45);
+  extract->Fit("fitfxn", "R");
+
+  Float_t t1 = -1.0/fitfxn->GetParameter(1);
+  Double_t uncert = max(fabs(t1+(1.0/(fitfxn->GetParameter(1)+fitfxn->GetParError(1)))), fabs(t1+(1.0/(fitfxn->GetParameter(1)-fitfxn->GetParError(1)))));
+
+  cout << fabs(t1+(1.0/(fitfxn->GetParameter(1)+fitfxn->GetParError(1)))) << ", " << fabs(t1+(1.0/(fitfxn->GetParameter(1)-fitfxn->GetParError(1)))) << endl;
+  cout << "T1 = " << -1.0/fitfxn->GetParameter(1) << " +- " << uncert << endl;
+  
 }

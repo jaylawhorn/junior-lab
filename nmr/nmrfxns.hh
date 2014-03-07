@@ -74,6 +74,7 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
   for (Int_t i=0; i<gr_sig->GetN(); i++) {
 
     gr_sig->GetPoint(i,x,y);
+    gr_sig->SetPoint(i, 1000*x, 1000*y);
     gr_pulse->GetPoint(i, xpulse, ypulse);
 
     if (ypulse>1.0) {
@@ -103,14 +104,22 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
 
     }
 
+
+
   }
 
   Double_t start_draw=0, end_draw=0;
   gr_sel->GetPoint(1, start_draw, temp);
   gr_sel->GetPoint(j-1, end_draw, temp);
 
-  gr_sig->GetXaxis()->SetRangeUser(start_draw-0.001, end_draw+0.001);
-  gr_sel->Draw("same p");
+  gr_sig->SetLineWidth(2);
+  gr_sig->SetTitle();
+  gr_sig->GetXaxis()->SetTitle("Time [ms]");
+  gr_sig->GetYaxis()->SetTitle("Voltage [mV]");
+  
+  //gr_sig->GetXaxis()->SetRangeUser(start_draw-0.001, end_draw+0.001);
+  gr_sig->GetXaxis()->SetRangeUser((start_draw-0.001)*1000, (end_draw+0.001)*1000);
+  //gr_sel->Draw("same p");
 
   char outfile[50];
 
@@ -196,7 +205,7 @@ void carrPurcell(const TString filename, Int_t n, TString dir, TGraphErrors *gr_
 
   c1->SaveAs(outfile);
 
-  //delete c1;
+  delete c1;
 
 }
 #endif

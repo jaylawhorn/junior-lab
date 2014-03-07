@@ -95,12 +95,14 @@ void water(TString conf="water_o2") {
 
   TGraphErrors *echo_height = new TGraphErrors(fnamev.size()/3);
 
+  cout << endl;
   for (Int_t i=0; i<fnamev.size()/3; i++) {
 
     avg=(echo_ampv[3*i]+echo_ampv[3*i+1]+echo_ampv[3*i+2])/3.0;
     stdev=TMath::Sqrt((echo_ampv[3*i]*echo_ampv[3*i]+echo_ampv[3*i+1]*echo_ampv[3*i+1]+echo_ampv[3*i+2]*echo_ampv[3*i+2])/3-avg*avg);
 
-    cout << timev[3*i] << " " << avg << " +- " << TMath::Sqrt(stdev*stdev+3*echo_dampv[3*i+1]*echo_dampv[3*i+1]) << endl;
+    //cout << timev[3*i] << " " << avg << " +- " << TMath::Sqrt(stdev*stdev+3*echo_dampv[3*i+1]*echo_dampv[3*i+1]) << endl;
+    cout << timev[3*i] << " " << 1000*avg << " 0 " << 1000*TMath::Sqrt(stdev*stdev/3+echo_dampv[3*i+1]*echo_dampv[3*i+1]) << endl;
 
     uncert=TMath::Sqrt(stdev*stdev+3*echo_dampv[3*i+1]*echo_dampv[3*i+1])/TMath::Sqrt(3);
     
@@ -108,6 +110,7 @@ void water(TString conf="water_o2") {
     echo_height->SetPointError(i, 0, 1000*uncert);
 
   }
+  cout << endl;
 
   echo_height->SetTitle("");
   echo_height->GetXaxis()->SetTitle("Repeat Time [s]");
@@ -125,7 +128,5 @@ void water(TString conf="water_o2") {
   Double_t d_t1 = TMath::Max(fabs(-1.0/(fitfxn->GetParameter(2)+fitfxn->GetParError(2))-nom_t1), fabs(-1.0/(fitfxn->GetParameter(2)-fitfxn->GetParError(2))-nom_t1));
 
   cout << "T1 = " << -1.0/fitfxn->GetParameter(2) << " +- " << d_t1 << endl;
-
-  //c1->SaveAs("out.png");
 
 }
