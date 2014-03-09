@@ -24,7 +24,7 @@ void relaxationTimes180t90() {
 
   const int n=8;
 
-  TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
+  TCanvas *c1 = new TCanvas("c1", "c1", 800, 800);
 
   //******************************
   // from pg 13 of lab notebook
@@ -38,8 +38,6 @@ void relaxationTimes180t90() {
   Float_t avg[n], std[n], err[n];
 
   for (Int_t i=0; i<n; i++) {
-    delay[i]/=1000.0;
-    times[i]+=delay[i];
     avg[i] = (v1[i]+v2[i]+v3[i])/3.0;
     std[i] = (v1[i]*v1[i]+v2[i]*v2[i]+v3[i]*v3[i])/3.0;
     std[i] -= avg[i]*avg[i];
@@ -50,22 +48,25 @@ void relaxationTimes180t90() {
 
   TGraphErrors *grT1 = new TGraphErrors(n, times, avg, 0, err);
 
+  TF1 *t1fit2 = new TF1("t1fit2", "[0]-expo(1)", 15, 75);
   TF1 *t1fit = new TF1("t1fit", "[0]-expo(1)", 10, 75);
   t1fit->SetLineColor(kBlue);
   
-  grT1->Fit("t1fit", "R");
+  grT1->Fit("t1fit", "ER");
+  grT1->Fit("t1fit2", "ERN");
 
   cout << endl;
 
   Float_t t1 = -1.0/t1fit->GetParameter(2);
-  Double_t uncert = max(fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))), fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))));
+  Float_t t12 = -1.0/t1fit2->GetParameter(2);
+  Double_t uncert = fabs(t1fit->GetParError(2)/(t1fit->GetParameter(2)*t1fit->GetParameter(2)));
 
-  cout << fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))) << ", " << fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))) << endl;
-  cout << "T1 = " << -1.0/t1fit->GetParameter(2) << " +- " << uncert << endl; 
+  cout << "T1 = " << -1.0/t1fit->GetParameter(2) << " +- " << uncert << " +- " << fabs(t12-t1) << endl; 
+  cout << "     " << TMath::Sqrt(uncert*uncert+fabs(t12-t1)*fabs(t12-t1)) << endl;
 
   grT1->SetTitle("");
-  grT1->GetXaxis()->SetTitle("Tau [ms]");
-  grT1->GetYaxis()->SetTitle("Max Voltage [mV]");
+  grT1->GetXaxis()->SetTitle("#tau [ms]");
+  grT1->GetYaxis()->SetTitle("FID Amplitude [mV]");
   grT1->Draw("ap");
 
   c1->SaveAs("images/t1_180t90.png");

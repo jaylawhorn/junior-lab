@@ -1,47 +1,33 @@
-
-Processing threePulse.C+...
-12 0.013464 0.0012
-24 0.026352 0.0112
-3 0.005528 0.016
-60 0.062344 0.0324
-12 0.013376 0.0012
-24 0.02636 0.0116
-3 0.005528 0.0172
-60 0.062344 0.0324
-12 0.013368 0.0008
-24 0.02636 0.012
-3 0.005528 0.0168
-60 0.062328 0.032
-16 0.018368 0.004
-28 0.03036 0.0164
-44 0.046336 0.0268
-8 0.010528 0.0056
-16 0.018352 0.004
-28 0.030344 0.016
-44 0.046344 0.0268
-8 0.010528 0.0048
-16 0.018352 0.004
-28 0.03036 0.0164
-44 0.046344 0.0268
-8 0.01052 0.0052
-20 0.02236 0.0092
-36 0.038352 0.0228
-52 0.054336 0.0296
-20 0.022352 0.0092
-36 0.038352 0.0228
-52 0.054336 0.0304
-20 0.02236 0.0092
-36 0.038352 0.0224
-52 0.054328 0.0296
-
-****************************************
-Minimizer is Minuit / Migrad
-Chi2                      =      4.28163
-NDf                       =            6
-Edm                       =  5.14723e-10
-NCalls                    =          206
-p0                        =      44.0836   +/-   3.53261     
-p1                        =      4.13509   +/-   0.0315323   
-p2                        =   -0.0282334   +/-   0.00411411  
-6.04153, 4.50475
-T1 = 35.419 +- 6.04153
+data/Three-pulse-measurements/t12_0.csv	12
+data/Three-pulse-measurements/t12_1.csv	12
+data/Three-pulse-measurements/t12_2.csv	12
+data/Three-pulse-measurements/t16_0.csv	16
+data/Three-pulse-measurements/t16_1.csv	16
+data/Three-pulse-measurements/t16_2.csv	16
+data/Three-pulse-measurements/t20_0.csv	20
+data/Three-pulse-measurements/t20_1.csv	20
+data/Three-pulse-measurements/t20_2.csv	20
+data/Three-pulse-measurements/t24_0.csv	24
+data/Three-pulse-measurements/t24_1.csv	24
+data/Three-pulse-measurements/t24_2.csv	24
+data/Three-pulse-measurements/t28_0.csv	28
+data/Three-pulse-measurements/t28_1.csv	28
+data/Three-pulse-measurements/t28_2.csv	28
+data/Three-pulse-measurements/t36_0.csv	36
+data/Three-pulse-measurements/t36_1.csv	36
+data/Three-pulse-measurements/t36_2.csv	36
+data/Three-pulse-measurements/t3_0.csv	3
+data/Three-pulse-measurements/t3_1.csv	3
+data/Three-pulse-measurements/t3_2.csv	3
+data/Three-pulse-measurements/t44_0.csv	44
+data/Three-pulse-measurements/t44_1.csv	44
+data/Three-pulse-measurements/t44_2.csv	44
+data/Three-pulse-measurements/t52_0.csv	52
+data/Three-pulse-measurements/t52_1.csv	52
+data/Three-pulse-measurements/t52_2.csv	52
+data/Three-pulse-measurements/t60_0.csv	60
+data/Three-pulse-measurements/t60_1.csv	60
+data/Three-pulse-measurements/t60_2.csv	60
+data/Three-pulse-measurements/t8_0.csv	8
+data/Three-pulse-measurements/t8_1.csv	8
+data/Three-pulse-measurements/t8_2.csv	8

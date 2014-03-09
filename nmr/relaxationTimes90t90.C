@@ -24,7 +24,7 @@ void relaxationTimes90t90() {
 
   const int n=20;
 
-  TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
+  TCanvas *c1 = new TCanvas("c1", "c1", 800, 800);
 
   //******************************
   // from pg 12 of lab notebook
@@ -50,17 +50,15 @@ void relaxationTimes90t90() {
   TF1 *t1fit = new TF1("t1fit", "[0]-expo(1)", 0, 115);
   t1fit->SetLineColor(kBlue);
 
-  grT1->SetTitle("90-tau-90");
-  grT1->GetXaxis()->SetTitle("tau [ms]");
-  grT1->GetYaxis()->SetTitle("Peak Value [mV]");
-  grT1->Fit("t1fit", "R");
+  grT1->SetTitle("");
+  grT1->GetXaxis()->SetTitle("#tau [ms]");
+  grT1->GetYaxis()->SetTitle("FID Amplitude [mV]");
+  grT1->Fit("t1fit", "RM");
 
   Float_t t1 = -1.0/t1fit->GetParameter(2);
-  Double_t uncert = max(fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))), fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))));
+  Double_t uncert = fabs(t1fit->GetParError(2)/(t1fit->GetParameter(2)*t1fit->GetParameter(2)));
 
-  cout << fabs(t1+(1.0/(t1fit->GetParameter(2)+t1fit->GetParError(2)))) << ", " << fabs(t1+(1.0/(t1fit->GetParameter(2)-t1fit->GetParError(2)))) << endl;
   cout << "T1 = " << -1.0/t1fit->GetParameter(2) << " +- " << uncert << endl;
-
 
   grT1->Draw("ap");
 

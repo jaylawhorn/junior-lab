@@ -6,7 +6,7 @@
 #include <TH1D.h>
 #include <TGaxis.h>
 #include <TGraph.h>
-#include <TGraphErrors.h>
+#include <TGraphAsymmErrors.h>
 #include <TLegend.h>
 #include <TStyle.h>
 #include <TString.h>
@@ -27,33 +27,41 @@
 
 void visc_final() {
 
-  TCanvas *c1 = MakeCanvas("c1", "c1", 800, 600);
+  TCanvas *c1 = MakeCanvas("c1", "c1", 600, 600);
   c1->SetLogx();
   c1->SetLogy();
 
   TGaxis::SetMaxDigits(3);
 
-  TGraphErrors *visc = new TGraphErrors();
+  TGraphAsymmErrors *visc = new TGraphAsymmErrors();
 
-  visc->SetPoint(0, 1410, 26.92);
-  visc->SetPointError(0, 0, 7.99);
+  // pure glycerine
+  visc->SetPoint(0, 1410.0/100, 27.14/1000);
+  visc->SetPointError(0, 0, 0, 0.96/1000, 0.96/1000);
 
-  visc->SetPoint(4, 22.5, 611.74);
-  visc->SetPointError(4, 0, 1105.45);
+  // 70%
+  visc->SetPoint(1, 22.5/100, 125.3/1000);
+  visc->SetPointError(1, 0, 0, 125.3/1000, 474.0/1000);
 
-  visc->SetPoint(1, 6.00, 78.05);
-  visc->SetPointError(1, 0, 26.74);
+  // 50%
+  visc->SetPoint(2, 6.00/100, 35.3/1000);
+  visc->SetPointError(2, 0, 0, 10.0/1000, 110.0/1000);
 
-  visc->SetPoint(2, 2.5, 73.31);
-  visc->SetPointError(2, 0, 30.59);
+  // 30%
+  visc->SetPoint(3, 2.5/100, 112.9/1000);
+  visc->SetPointError(3, 0, 0, 80./1000, 348./1000);
 
-  visc->SetPoint(3, 1.005, 2139);
-  visc->SetPointError(3, 0, 321);
+  visc->SetPoint(4, 1.005/100,2100./1000);
+  visc->SetPointError(4, 0, 0, 1300./1000, 1300./1000);
 
   visc->SetTitle();
-  visc->GetXaxis()->SetTitle("Viscosity [centipoise]");
-  visc->GetYaxis()->SetTitle("T_{1} [ms]");
+  visc->GetXaxis()->SetTitle("Viscosity [poise]");
+  visc->GetYaxis()->SetTitle("T_{1} [s]");
+
+  visc->GetYaxis()->SetRangeUser(0.01, 10);
   visc->Draw("ap");
+
+  c1->SaveAs("visc_final.png");
 
   //TF1 *fitfxn = new TF1("fitfxn", "[0]/x+[1]", 0.5, 1500);
   //visc->Fit("fitfxn");

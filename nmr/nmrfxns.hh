@@ -20,6 +20,10 @@
 #include <iomanip>
 #include <iostream>
 
+Double_t getUncert(const TString filename);
+
+void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphErrors *gr_sel);
+
 void confParse(const TString    conf,      // input conf file
                vector<TString>  &fnamev,   // vector to store sample files
                vector<Double_t> &timev,    // vector to store sample times
@@ -48,7 +52,7 @@ void confParse(const TString    conf,      // input conf file
 
 void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphErrors *gr_sel) {
 
-  TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
+  TCanvas *c1 = new TCanvas("c1", "c1", 800, 800);
 
   TGraph *gr_pulse = new TGraph(filename, "%lg %*lg %lg", ",");
   TGraph *gr_sig = new TGraph(filename, "%lg %lg", ",");
@@ -65,7 +69,7 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
   Double_t min_x=1, min_y=1;
   Double_t max_x=-1, max_y=-1;
 
-  Double_t dx=0.4e-3;
+  Double_t dx=getUncert(filename);
 
   Int_t j=0;
 
@@ -104,8 +108,6 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
 
     }
 
-
-
   }
 
   Double_t start_draw=0, end_draw=0;
@@ -117,9 +119,7 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
   gr_sig->GetXaxis()->SetTitle("Time [ms]");
   gr_sig->GetYaxis()->SetTitle("Voltage [mV]");
   
-  //gr_sig->GetXaxis()->SetRangeUser(start_draw-0.001, end_draw+0.001);
   gr_sig->GetXaxis()->SetRangeUser((start_draw-0.001)*1000, (end_draw+0.001)*1000);
-  //gr_sel->Draw("same p");
 
   char outfile[50];
 
@@ -131,8 +131,34 @@ void getPeaks(const TString filename, Float_t tau, Int_t n, TString dir, TGraphE
 
 }
 
-void carrPurcell(const TString filename, Int_t n, TString dir, TGraphErrors *gr_sel) {
+Double_t getUncert(const TString filename) {
 
+  TGraph *gr = new TGraph(filename, "%lg %lg", ",");
+  
+  TH1D *hist = new TH1D("hist", "hist", 100, -2, 0);
+  
+  Double_t x, y;
+  
+  Double_t mean=0, stdev=0;
+  
+  for (Int_t i=0; i<1000; i++) {
+    gr->GetPoint(i, x, y);
+    hist->Fill(y);
+    mean+=y;
+    stdev+=y*y;
+  }
+  
+  mean/=1000;
+  stdev/=1000;
+  stdev-=mean*mean;
+  stdev=TMath::Sqrt(stdev);
+
+  return stdev;
+ 
+}
+
+void carrPurcell(const TString filename, Int_t n, TString dir, TGraphErrors *gr_sel) {
+   
   TCanvas *c1 = new TCanvas("c1", "c1", 800, 600);
 
   TGraph *gr_pulse = new TGraph(filename, "%lg %*lg %lg", ",");

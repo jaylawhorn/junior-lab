@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  28 FEB 2014 20:07
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  8 MAR 2014 23:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -387,7 +387,11 @@ Package: subfigure 2002/03/15 v2.1.5 subfigure package
 \subfig@top=\skip59
 \subfig@bottom=\skip60
 )
-(./nmr_klawhorn.aux)
+(./nmr_klawhorn.aux
+
+LaTeX Warning: Label `t:glyc' multiply defined.
+
+)
 \openout1 = `nmr_klawhorn.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
@@ -409,8 +413,7 @@ Class revtex4 Info: Patching unrecognized longtable package. (Proceeding with f
 ingers crossed) on input line 61.
 Class revtex4 Info: cite was not loaded (OK!) on input line 61.
 Class revtex4 Info: multicol was not loaded (OK!) on input line 61.
-
-(/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
+ (/usr/local/texlive/2012/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count129
 \scratchdimen=\dimen130
@@ -461,46 +464,94 @@ LaTeX Info: Redefining \nameref on input line 61.
 \@outlinefile=\write3
 \openout3 = `nmr_klawhorn.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 72.
+LaTeX Font Info:    Try loading font information for U+msa on input line 69.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 72.
+LaTeX Font Info:    Try loading font information for U+msb on input line 69.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 91.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 91.
- [1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./n
-mr_klawhorn.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 91.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 91.
+<water_n2/fidecho.png, id=11, 798.985pt x 743.77875pt>
+File: water_n2/fidecho.png Graphic file (type png)
+
+<use water_n2/fidecho.png>
+Package pdftex.def Info: water_n2/fidecho.png used on input line 92.
+(pdftex.def)             Requested size: 170.71652pt x 158.92194pt.
+ [1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./wa
+ter_n2/fidecho.png>]
+<apparatus.png, id=34, 776.9025pt x 451.6875pt>
+File: apparatus.png Graphic file (type png)
+ <use apparatus.png>
+Package pdftex.def Info: apparatus.png used on input line 106.
+(pdftex.def)             Requested size: 170.71652pt x 99.25438pt.
+ [2 <./apparatus.png>] <images/t1_180t90.png, id=47, 798.985pt x 743.77875pt>
+File: images/t1_180t90.png Graphic file (type png)
+
+<use images/t1_180t90.png>
+Package pdftex.def Info: images/t1_180t90.png used on input line 145.
+(pdftex.def)             Requested size: 170.71652pt x 158.92194pt.
+ [3 <./images/t1_180t90.png>]
+<threePulse.png, id=53, 698.61pt x 675.52374pt>
+File: threePulse.png Graphic file (type png)
+ <use threePulse.png>
+Package pdftex.def Info: threePulse.png used on input line 163.
+(pdftex.def)             Requested size: 170.71652pt x 165.077pt.
+ [4 <./threePulse.png>]
+Underfull \hbox (badness 1163) in paragraph at lines 222--223
+[]\OT1/cmr/m/n/10 The mea-sure-ment un-cer-tainty was cal-cu-lated and
+ []
+
+<water_n2.png, id=68, 698.61pt x 675.52374pt>
+File: water_n2.png Graphic file (type png)
+ <use water_n2.png>
+Package pdftex.def Info: water_n2.png used on input line 235.
+(pdftex.def)             Requested size: 170.71652pt x 165.077pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 258--262
+ []\OT1/cmr/m/n/9 N. Bloem-ber-gen, "Nu-clear Mag-netic Re-lax-ation"
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 265.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 265.
+[5 <./water_n2.png>] (./nmr_klawhorn.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 265.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 265.
 Package rerunfilecheck Info: File `nmr_klawhorn.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+(rerunfilecheck)             Checksum: 9F07EC05F143D1F0C6494F0F9D9DFD36;46.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 7830 strings out of 493488
- 109336 string characters out of 3141326
- 202221 words of memory out of 3000000
- 11026 multiletter control sequences out of 15000+200000
- 14294 words of font info for 53 fonts, out of 3000000 for 9000
+ 7917 strings out of 493488
+ 110381 string characters out of 3141326
+ 224891 words of memory out of 3000000
+ 11083 multiletter control sequences out of 15000+200000
+ 16461 words of font info for 61 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 36i,7n,27p,462b,328s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{frontmatter@1} has been referenced but does not e
-xist, replaced by a fixed one
-
-</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><
-/usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
-sr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/
-local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
-ocal/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/loc
-al/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on nmr_klawhorn.pdf (1 page, 71089 bytes).
+ 36i,10n,27p,943b,331s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></
+usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></us
+r/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
+local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/loc
+al/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/
+texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/tex
+live/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texliv
+e/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
+/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2
+012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/201
+2/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2012/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on nmr_klawhorn.pdf (5 pages, 255953 bytes).
 PDF statistics:
- 39 PDF objects out of 1000 (max. 8388607)
- 28 compressed objects within 1 object stream
- 2 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 125 PDF objects out of 1000 (max. 8388607)
+ 96 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 500000)
+ 34 words of extra memory for PDF output out of 10000 (max. 10000000)
 

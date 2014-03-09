@@ -36,6 +36,8 @@ void magMoments() {
 
   Float_t d_calib = meas*TMath::Sqrt(d_meas*d_meas+0.01*0.01); // added in quadrature with calibration magnet uncertainty
 
+  cout << d_calib/meas << endl;
+
   Float_t b_max = 1.762e3; // G
   Float_t db = 0.0005; // G
   Float_t db_tot = b_max*TMath::Sqrt((d_calib*d_calib)/(meas*meas)+db*db/(b_max*b_max)); // overall uncertainty on measured magnetic field
