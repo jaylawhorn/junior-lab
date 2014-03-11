@@ -31,7 +31,10 @@ void vel_cal() {
   Int_t nPasses = 3117; //from absolute_cal...., abs_cal_1, abs_cal_2 only
   Float_t dwell = 0.1; //ms
 
-  Float_t lambda = 0.650; //micron need wavelength of laser!
+  Float_t lambda = 0.671; //micron need wavelength of laser!
+
+  Double_t nomE=14.3e3; //eV
+  Double_t cLight=3e11; //mm/s
 
   TCanvas *c1 = MakeCanvas("c1", "c1", 800, 600);
 
@@ -102,8 +105,8 @@ void vel_cal() {
   inf->Fit("fitCor", "RN");
   fe->Fit("fitPeak", "RN");
 
-  //fitNom->Draw("same");
-  //fitPeak->Draw("same");
+  fitNom->Draw("same");
+  fitPeak->Draw("same");
 
   Double_t a = fitNom->GetParameter(0);
   Double_t b = fitNom->GetParameter(1);
@@ -114,11 +117,12 @@ void vel_cal() {
   cout << "Function: C = |" << a << " + " << b << " * ( x - " << c << " ) + " << d << " * ( x - " << c << " ) ^2|" << endl;
   cout << endl;
 
-  TF1 *velNom = new TF1("velNom", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2)", loLim, upLim);
-  velNom->SetParameter(0, a*lambda/(2*nPasses*dwell));
-  velNom->SetParameter(1, b*lambda/(2*nPasses*dwell));
-  velNom->SetParameter(2, c);
-  velNom->SetParameter(3, d*lambda/(2*nPasses*dwell));
+  //TF1 *velNom = new TF1("velNom", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2)", loLim, upLim);
+  TF1 *velNom = new TF1("velNom", "abs([0]*(x-[1])+[2]*(x-[1])**2)", loLim, upLim);
+  //velNom->SetParameter(0, a*lambda/(2*nPasses*dwell));
+  velNom->SetParameter(0, b*lambda/(2*nPasses*dwell));
+  velNom->SetParameter(1, c);
+  velNom->SetParameter(2, d*lambda/(2*nPasses*dwell));
 
   a = fitCor->GetParameter(0);
   b = fitCor->GetParameter(1);
@@ -129,22 +133,23 @@ void vel_cal() {
   cout << "Function: C = |" << a << " + " << b << " * ( x - " << c << " ) + " << d << " * ( x - " << c << " ) ^2 + " << e << " * ( x - " << c << " ) ^3|" << endl;
   cout << endl;
 
-  TF1 *velCor = new TF1("velCor", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2+[4]*(x-[2])**3)", loLim, upLim);
-  velCor->SetParameter(0, a*lambda/(2*nPasses*dwell));
-  velCor->SetParameter(1, b*lambda/(2*nPasses*dwell));
-  velCor->SetParameter(2, c);
-  velCor->SetParameter(3, d*lambda/(2*nPasses*dwell));
-  velCor->SetParameter(4, e*lambda/(2*nPasses*dwell));
+  //TF1 *velCor = new TF1("velCor", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2+[4]*(x-[2])**3)", loLim, upLim);
+  TF1 *velCor = new TF1("velCor", "abs([0]*(x-[1])+[2]*(x-[1])**2+[3]*(x-[1])**3)", loLim, upLim);
+  //velCor->SetParameter(0, a*lambda/(2*nPasses*dwell));
+  velCor->SetParameter(0, b*lambda/(2*nPasses*dwell));
+  velCor->SetParameter(1, c);
+  velCor->SetParameter(2, d*lambda/(2*nPasses*dwell));
+  velCor->SetParameter(3, e*lambda/(2*nPasses*dwell));
 
   vector<Double_t> peakPos;
   vector<Double_t> peakPosUnc;
 
-  peakPos.push_back(fitPeak->GetParameter(2));  peakPosUnc.push_back(fitPeak->GetParameter(3)/TMath::Sqrt(upLim-loLim));
-  peakPos.push_back(fitPeak->GetParameter(5));  peakPosUnc.push_back(fitPeak->GetParameter(6)/TMath::Sqrt(upLim-loLim));
-  peakPos.push_back(fitPeak->GetParameter(8));  peakPosUnc.push_back(fitPeak->GetParameter(9)/TMath::Sqrt(upLim-loLim));
-  peakPos.push_back(fitPeak->GetParameter(11)); peakPosUnc.push_back(fitPeak->GetParameter(12)/TMath::Sqrt(upLim-loLim));
-  peakPos.push_back(fitPeak->GetParameter(14)); peakPosUnc.push_back(fitPeak->GetParameter(15)/TMath::Sqrt(upLim-loLim));
-  peakPos.push_back(fitPeak->GetParameter(17)); peakPosUnc.push_back(fitPeak->GetParameter(18)/TMath::Sqrt(upLim-loLim));
+  peakPos.push_back(fitPeak->GetParameter(2));  peakPosUnc.push_back(TMath::Sqrt(fitPeak->GetParameter(3)));
+  peakPos.push_back(fitPeak->GetParameter(5));  peakPosUnc.push_back(TMath::Sqrt(fitPeak->GetParameter(6)));
+  peakPos.push_back(fitPeak->GetParameter(8));  peakPosUnc.push_back(TMath::Sqrt(fitPeak->GetParameter(9)));
+  peakPos.push_back(fitPeak->GetParameter(11)); peakPosUnc.push_back(TMath::Sqrt(fitPeak->GetParameter(12)));
+  peakPos.push_back(fitPeak->GetParameter(14)); peakPosUnc.push_back(TMath::Sqrt(fitPeak->GetParameter(15)));
+  peakPos.push_back(fitPeak->GetParameter(17)); peakPosUnc.push_back(TMath::Sqrt(fitPeak->GetParameter(18)));
 
   vector<Double_t> peakVel;
   vector<Double_t> peakVelUnc;
@@ -172,18 +177,73 @@ void vel_cal() {
 
   }
 
-  Double_t nomE=14.3e3; //keV
-  Double_t cLight=3e11; //mm/s
+  vector<Double_t> peakEn;
+  vector<Double_t> peakEnUnc;
 
-  cout << "dE excited" << endl;
-  cout << nomE*(peakVel[0]-peakVel[1])/cLight << endl;
-  cout << nomE*(peakVel[3]-peakVel[4])/cLight << endl;
-  cout << nomE*(peakVel[5]-peakVel[6])/cLight << endl;
+  cout << "     dE " << endl;
 
-  cout << "dE ground" << endl;
-  cout << nomE*(peakVel[1]-peakVel[3])/cLight << endl;
+  for (Int_t i=0; i<6; i++) {
+    peakEn.push_back(nomE*peakVel[i]/cLight);
+    peakEnUnc.push_back(nomE*peakVelUnc[i]/cLight);
+    cout << "Peak " << i << ": " << nomE*peakVel[i]/cLight << " +- " << nomE*peakVelUnc[i]/cLight << endl;
+  }
 
-  
+  vector<Double_t> g1;
+  vector<Double_t> dg1;
+
+  g1.push_back(peakEn[0]-peakEn[1]);
+  g1.push_back(peakEn[1]-peakEn[2]);
+  g1.push_back(peakEn[4]-peakEn[3]);
+  g1.push_back(peakEn[5]-peakEn[4]);
+
+  dg1.push_back(TMath::Sqrt(peakEnUnc[0]*peakEnUnc[0]+peakEnUnc[1]*peakEnUnc[1]));
+  dg1.push_back(TMath::Sqrt(peakEnUnc[1]*peakEnUnc[1]+peakEnUnc[2]*peakEnUnc[2]));
+  dg1.push_back(TMath::Sqrt(peakEnUnc[4]*peakEnUnc[4]+peakEnUnc[3]*peakEnUnc[3]));
+  dg1.push_back(TMath::Sqrt(peakEnUnc[5]*peakEnUnc[5]+peakEnUnc[4]*peakEnUnc[4]));
+
+  vector<Double_t> g0;
+  vector<Double_t> dg0;
+
+  g0.push_back(peakEn[3]+peakEn[1]);
+  g0.push_back(peakEn[4]+peakEn[2]);
+  dg0.push_back(TMath::Sqrt(peakEnUnc[3]*peakEnUnc[3]+peakEnUnc[1]*peakEnUnc[1]));
+  dg0.push_back(TMath::Sqrt(peakEnUnc[4]*peakEnUnc[4]+peakEnUnc[2]*peakEnUnc[2]));
+
+  Double_t avg_g1=0;
+  Double_t std_g1=0;
+
+  Double_t avg_g0=0;
+  Double_t std_g0=0;
+
+  for (Int_t i=0; i<4; i++) {
+    avg_g1+=g1[i]/(dg1[i]*dg1[i]);
+    std_g1+=1/(dg1[i]*dg1[i]);
+  }
+
+  avg_g1=avg_g1/std_g1;
+  std_g1=TMath::Sqrt(1/std_g1);
+
+  for (Int_t i=0; i<2; i++) {
+    avg_g0+=g0[i]/(dg0[i]*dg0[i]);
+    std_g0+=1/(dg0[i]*dg0[i]);
+  }
+
+  avg_g0=avg_g0/std_g0;
+  std_g0=TMath::Sqrt(1/std_g0);
+
+  Double_t mu_rat = -3*avg_g1/avg_g0;
+  Double_t mu_rat_unc = mu_rat*TMath::Sqrt((std_g0*std_g0)/(avg_g0*avg_g0)+(std_g1*std_g1)/(avg_g1*avg_g1));
+  Double_t mu0 = 0.0903;
+  Double_t mu0_unc = 0.0007;
+
+  cout << " Hanna g1 = " << 3.924*nomE/cLight << endl;
+  cout << " Hanna g0 = " << 2.244*nomE/cLight << endl;
+
+  cout << "g1      = " << avg_g1 << " +- " << std_g1 << endl;
+  cout << "g0      = " << avg_g0 << " +- " << std_g0 << endl;
+  cout << "mu1/mu0 = " << mu_rat << " +- " << mu_rat_unc << endl;
+  cout << "mu0     = " << mu0 << " +- " << mu0_unc << "*** not our measurement***" << endl;
+  cout << "mu1     = " << mu_rat*mu0 << " +- " << TMath::Sqrt(mu_rat_unc*mu_rat_unc/(mu_rat*mu_rat)+mu0_unc*mu0_unc/(mu0*mu0)) << endl;
 
 }
 
