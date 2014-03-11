@@ -1,0 +1,227 @@
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include <TROOT.h>
+#include <TSystem.h>
+#include <TFile.h>
+#include <TMath.h>
+#include <TH1D.h>
+#include <TGraph.h>
+#include <TGraphErrors.h>
+#include <TLegend.h>
+#include <TStyle.h>
+#include <TString.h>
+#include <TCanvas.h>
+#include <TLine.h>
+#include <TBox.h>
+#include <TF1.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+
+#include "mosfxns.hh"
+#include "plotStyle.hh"
+#endif
+
+void vel_cal() {
+
+  Int_t upLim = 2048;
+  Int_t loLim = 275;//140;
+
+  Int_t nPasses = 3117; //from absolute_cal...., abs_cal_1, abs_cal_2 only
+  Float_t dwell = 0.1; //ms
+
+  Float_t lambda = 0.650; //micron need wavelength of laser!
+
+  TCanvas *c1 = MakeCanvas("c1", "c1", 800, 600);
+
+  TH1D *inf = new TH1D("inf", "inf", 2048, 0, 2048);  
+  TH1D *fe = new TH1D("fe", "fe", 2048, 0, 2048);
+
+  confParse("data_list.txt", 1, inf);
+  confParse("data_list.txt", 2, fe);
+
+  inf->SetTitle("");
+  inf->GetXaxis()->SetTitle("Channel");
+  inf->GetYaxis()->SetTitle("Counts");
+
+  inf->Draw();
+  fe->SetLineColor(kRed);
+  fe->Draw("same");
+
+  // fit to interferometric stuff
+  TF1 *fitNom = new TF1("fitNom", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2)-gaus(4)", loLim, upLim);
+  TF1 *fitCor = new TF1("fitCor", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2+[4]*(x-[2])**3)-gaus(5)", loLim, upLim);
+
+  fitNom->SetParameter(0, 250);
+  fitNom->SetParameter(1, 10);
+  fitNom->SetParameter(2, 1060);
+  fitNom->SetParameter(4, 2000);
+  fitNom->SetParameter(5, 410);
+  fitNom->SetParameter(6, 25);
+
+  fitCor->SetParameter(0, 250);
+  fitCor->SetParameter(1, 10);
+  fitCor->SetParameter(2, 1060);
+  fitCor->SetParameter(5, 2000);
+  fitCor->SetParameter(6, 410);
+  fitCor->SetParameter(7, 15);
+
+  TF1 *fitPeak = new TF1("fitPeak", "[0]-gaus(1)-gaus(4)-gaus(7)-gaus(10)-gaus(13)-gaus(16)-[19]*(x-[20])**2", loLim, upLim);
+
+  fitPeak->SetParameter(0, 2600);
+
+  fitPeak->SetParameter(1, 1000);
+  fitPeak->SetParameter(2, 520);
+  fitPeak->SetParameter(3, 25);
+
+  fitPeak->SetParameter(4, 1000);
+  fitPeak->SetParameter(5, 700);
+  fitPeak->SetParameter(6, 25);
+
+  fitPeak->SetParameter(7, 1000);
+  fitPeak->SetParameter(8, 950);
+  fitPeak->SetParameter(9, 25);
+
+  fitPeak->SetParameter(10, 1000);
+  fitPeak->SetParameter(11, 1150);
+  fitPeak->SetParameter(12, 25);
+
+  fitPeak->SetParameter(13, 1000);
+  fitPeak->SetParameter(14, 1350);
+  fitPeak->SetParameter(15, 25);
+
+  fitPeak->SetParameter(16, 1000);
+  fitPeak->SetParameter(17, 1600);
+  fitPeak->SetParameter(18, 25);
+
+  fitNom->SetLineColor(kBlue);
+  fitPeak->SetLineColor(kBlue);
+
+  inf->Fit("fitNom", "RN");
+  inf->Fit("fitCor", "RN");
+  fe->Fit("fitPeak", "RN");
+
+  //fitNom->Draw("same");
+  //fitPeak->Draw("same");
+
+  Double_t a = fitNom->GetParameter(0);
+  Double_t b = fitNom->GetParameter(1);
+  Double_t c = fitNom->GetParameter(2);
+  Double_t d = fitNom->GetParameter(3);
+
+  cout << endl;
+  cout << "Function: C = |" << a << " + " << b << " * ( x - " << c << " ) + " << d << " * ( x - " << c << " ) ^2|" << endl;
+  cout << endl;
+
+  TF1 *velNom = new TF1("velNom", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2)", loLim, upLim);
+  velNom->SetParameter(0, a*lambda/(2*nPasses*dwell));
+  velNom->SetParameter(1, b*lambda/(2*nPasses*dwell));
+  velNom->SetParameter(2, c);
+  velNom->SetParameter(3, d*lambda/(2*nPasses*dwell));
+
+  a = fitCor->GetParameter(0);
+  b = fitCor->GetParameter(1);
+  c = fitCor->GetParameter(2);
+  d = fitCor->GetParameter(3);
+  Double_t e = fitCor->GetParameter(4);
+
+  cout << "Function: C = |" << a << " + " << b << " * ( x - " << c << " ) + " << d << " * ( x - " << c << " ) ^2 + " << e << " * ( x - " << c << " ) ^3|" << endl;
+  cout << endl;
+
+  TF1 *velCor = new TF1("velCor", "[0]+abs([1]*(x-[2])+[3]*(x-[2])**2+[4]*(x-[2])**3)", loLim, upLim);
+  velCor->SetParameter(0, a*lambda/(2*nPasses*dwell));
+  velCor->SetParameter(1, b*lambda/(2*nPasses*dwell));
+  velCor->SetParameter(2, c);
+  velCor->SetParameter(3, d*lambda/(2*nPasses*dwell));
+  velCor->SetParameter(4, e*lambda/(2*nPasses*dwell));
+
+  vector<Double_t> peakPos;
+  vector<Double_t> peakPosUnc;
+
+  peakPos.push_back(fitPeak->GetParameter(2));  peakPosUnc.push_back(fitPeak->GetParameter(3)/TMath::Sqrt(upLim-loLim));
+  peakPos.push_back(fitPeak->GetParameter(5));  peakPosUnc.push_back(fitPeak->GetParameter(6)/TMath::Sqrt(upLim-loLim));
+  peakPos.push_back(fitPeak->GetParameter(8));  peakPosUnc.push_back(fitPeak->GetParameter(9)/TMath::Sqrt(upLim-loLim));
+  peakPos.push_back(fitPeak->GetParameter(11)); peakPosUnc.push_back(fitPeak->GetParameter(12)/TMath::Sqrt(upLim-loLim));
+  peakPos.push_back(fitPeak->GetParameter(14)); peakPosUnc.push_back(fitPeak->GetParameter(15)/TMath::Sqrt(upLim-loLim));
+  peakPos.push_back(fitPeak->GetParameter(17)); peakPosUnc.push_back(fitPeak->GetParameter(18)/TMath::Sqrt(upLim-loLim));
+
+  vector<Double_t> peakVel;
+  vector<Double_t> peakVelUnc;
+  vector<Double_t> peakVelVelUnc;
+  vector<Double_t> peakVelPosUnc;
+
+  cout << "    Peak Channel   Uncert" << endl;
+  for (Int_t i=0; i<6; i++) {
+    cout << "Peak " << i << ": " << peakPos[i] << " +- " << peakPosUnc[i] << endl;
+
+    peakVel.push_back(velNom->Eval(peakPos[i]));
+    peakVelVelUnc.push_back(fabs(velNom->Eval(peakPos[i])-velCor->Eval(peakPos[i])));
+    peakVelPosUnc.push_back(TMath::Max(fabs(velNom->Eval(peakPos[i])-velNom->Eval(peakPos[i]+peakPosUnc[i])), fabs(velNom->Eval(peakPos[i])-velNom->Eval(peakPos[i]-peakPosUnc[i]))));
+    
+  }
+  cout << endl;
+
+  cout << "   Peak Velocity [mm/s]  Vel. Cal. Uncert.  Peak Uncert." << endl;
+
+  for (Int_t i=0; i<6; i++) {
+
+    cout << "Peak " << i << ": " << peakVel[i] << " +- " << peakVelVelUnc[i] << " +- " << peakVelPosUnc[i] << endl;
+
+    peakVelUnc.push_back(TMath::Sqrt(peakVelVelUnc[i]*peakVelVelUnc[i]+peakVelPosUnc[i]*peakVelPosUnc[i]));
+
+  }
+
+  Double_t nomE=14.3e3; //keV
+  Double_t cLight=3e11; //mm/s
+
+  cout << "dE excited" << endl;
+  cout << nomE*(peakVel[0]-peakVel[1])/cLight << endl;
+  cout << nomE*(peakVel[3]-peakVel[4])/cLight << endl;
+  cout << nomE*(peakVel[5]-peakVel[6])/cLight << endl;
+
+  cout << "dE ground" << endl;
+  cout << nomE*(peakVel[1]-peakVel[3])/cLight << endl;
+
+  
+
+}
+
+/*
+Bool_t reject;
+Double_t pick(Double_t *x, Double_t *par) {
+
+  if (reject) {
+    if (x[0] < 150) {
+      TF1::RejectPoint();
+      return 0;
+    }
+    else if (x[0] > 400 && x[0] < 550) {
+      TF1::RejectPoint();
+      return 0;
+    }
+    else if (x[0] > 700 && x[0] < 800) {
+      TF1::RejectPoint();
+      return 0;
+    }
+    else if (x[0] > 900 && x[0] < 1000) {
+      TF1::RejectPoint();
+      return 0;
+    }
+    else if (x[0] > 1100 && x[0] < 1200) {
+      TF1::RejectPoint();
+      return 0;
+    }
+    else if (x[0] > 1300 && x[0] < 1450) {
+      TF1::RejectPoint();
+      return 0;
+    }
+    else if (x[0] > 1550 && x[0] < 1700) {
+      TF1::RejectPoint();
+      return 0;
+    }
+  }
+
+  return par[0]-par[1]*exp(-0.5*((x[0]*-par[2])/(par[3]))*((x[0]*-par[2])/(par[3])));
+}
+*/

@@ -1,0 +1,51 @@
+
+# DO NOT DELETE
+
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TCanvas.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TPad.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TVirtualPad.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttPad.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/Rtypes.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/RConfig.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/RVersion.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/DllImport.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/Rtypeinfo.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/snprintf.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/strlcpy.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TGenericClassInfo.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TSchemaHelper.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TVirtualX.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TNamed.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TObject.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TStorage.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TVersionCheck.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/Riosfwd.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TBuffer.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TString.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TMathBase.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttLine.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttFill.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttText.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttMarker.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/GuiTypes.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/Buttons.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TQObject.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttCanvas.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TCanvasImp.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TH1.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAxis.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TAttAxis.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TArrayD.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TArray.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TArrayC.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TArrayS.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TArrayI.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TArrayF.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/Foption.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TVectorFfwd.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TVectorDfwd.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TFitResultPtr.h
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/TStyle.h
+./plotStyle_cc.so: plotStyle.hh
+./plotStyle_cc.so: /usr/local/Cellar/root/HEAD/include/root/cintdictversion.h /usr/local/Cellar/root/HEAD/include/root/RVersion.h
+plotStyle_cc__ROOTBUILDVERSION= 5.34/10

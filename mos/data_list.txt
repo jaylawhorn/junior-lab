@@ -1,0 +1,12 @@
+# filename			# data type (0=from first day, 1=inf, 2=iron for inf, 3=for fe2o3)
+data/abs_calibration_1.csv	1
+data/abs_calibration_2.csv	1
+data/absolute_calibration.csv	1
+data/disc_setting.csv		0
+data/enriched_fe_3_6_0.csv	2
+data/enriched_fe_3_6_1.csv	2
+data/first_with_disc.csv	0
+data/overnight_enriched_fe.csv	2
+data/short_moved_close_3_7.csv	3
+data/zee_enrich_57fe_0.csv	0
+data/zee_enrich_57fe_1.csv	0
