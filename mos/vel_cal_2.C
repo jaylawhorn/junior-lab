@@ -1,3 +1,11 @@
+//----------------------------------------------------------------------------
+//
+// Velocity curve derivation from second set of interferometric data
+// Also determination of the energy splittings in 57Fe and magnetic moments
+// of first and second excited states
+// (3/12/14)
+//
+//----------------------------------------------------------------------------
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
 #include <TSystem.h>

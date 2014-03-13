@@ -78,9 +78,9 @@ void getVel(vector<Double_t> peak, vector<Double_t> peakunc, TF1 *velocityCurve)
   vel.push_back(3.37); velunc.push_back(0.08);
   vel.push_back(5.93); velunc.push_back(0.11);
 
-  TGraphErrors vel(6, peak, vel, peakunc, velunc);
+  TGraphErrors *velGraph = new TGraphErrors(peak.size(), &(peak[0]), &(vel[0]), &(peakunc[0]), &(velunc[0]));
 
-  vel->Fit(velocityCurve->GetName(), "MN");
+  velGraph->Fit(velocityCurve->GetName(), "EMN");
 
 }
 

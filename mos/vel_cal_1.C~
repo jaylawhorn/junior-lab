@@ -1,11 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Velocity curve derivation from first set of data - non-linearities in 
-// interferometric response make this data undesirable 
-//
-// NOT USED (3/12/14)
-//
-//----------------------------------------------------------------------------
 #if !defined(__CINT__) || defined(__MAKECINT__)
 #include <TROOT.h>
 #include <TSystem.h>
