@@ -67,4 +67,21 @@ void fillHist(const TString filename, // input file
 
 }
 
+void getVel(vector<Double_t> peak, vector<Double_t> peakunc, TF1 *velocityCurve) {
+
+  vector<Double_t> vel;
+  vector<Double_t> velunc;
+  vel.push_back(-6.18); velunc.push_back(0.15);
+  vel.push_back(-3.64); velunc.push_back(0.15);
+  vel.push_back(-1.10); velunc.push_back(0.11);
+  vel.push_back(0.83); velunc.push_back(0.08);
+  vel.push_back(3.37); velunc.push_back(0.08);
+  vel.push_back(5.93); velunc.push_back(0.11);
+
+  TGraphErrors vel(6, peak, vel, peakunc, velunc);
+
+  vel->Fit(velocityCurve->GetName(), "MN");
+
+}
+
 #endif
