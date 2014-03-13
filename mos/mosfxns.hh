@@ -80,7 +80,9 @@ void getVel(vector<Double_t> peak, vector<Double_t> peakunc, TF1 *velocityCurve)
 
   TGraphErrors *velGraph = new TGraphErrors(peak.size(), &(peak[0]), &(vel[0]), &(peakunc[0]), &(velunc[0]));
 
-  velGraph->Fit(velocityCurve->GetName(), "EMN");
+  velGraph->Draw("apl");
+
+  velGraph->Fit(velocityCurve->GetName(), "EMNR");
 
 }
 

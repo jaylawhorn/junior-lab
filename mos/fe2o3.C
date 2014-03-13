@@ -89,7 +89,21 @@ void fe2o3() {
   peakPos.push_back(fitPeak->GetParameter(17)); peakPosUnc.push_back(TMath::Sqrt(fabs(fitPeak->GetParameter(18))));
 
   TF1 *velCurve = new TF1("velCurve", "[0]*x+[1]*x^2+[2]", 200, 2040);
+  TF1 *velCurve2 = new TF1("velCurve2", "[0]*x+[1]", 200, peakPos[2]+50);
+  TF1 *velCurve3 = new TF1("velCurve3", "[0]*x+[1]", peakPos[3]-50, 2040);
   getVel(peakPos, peakPosUnc, velCurve);
+  getVel(peakPos, peakPosUnc, velCurve2);
+  getVel(peakPos, peakPosUnc, velCurve3);
+
+  velCurve->SetLineColor(kBlue);
+  velCurve2->SetLineColor(kGreen);
+  velCurve3->SetLineColor(kGreen);
+
+  velCurve->Draw("same");
+  velCurve2->Draw("same");
+  velCurve3->Draw("same");
+
+  c1->SaveAs("fe2o3_velcurves.png");
 
   feQuad->SetTitle("");
   feQuad->GetXaxis()->SetTitle("Channel");
@@ -129,6 +143,8 @@ void fe2o3() {
 
   feQuad->Fit("fitPeak2", "R");
 
+  c1->SaveAs("fe2o3_peaks.png");
+
   vector<Double_t> feoPeak;
   vector<Double_t> feoPeakUnc1;
   vector<Double_t> feoPeakUnc2;
@@ -138,24 +154,42 @@ void fe2o3() {
     feoPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2+3*i)));
 
     feoPeakUnc1.push_back(TMath::Max(fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))), fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))))); 
-    //feoPeakUnc2.push_back(fabs(feoPeak[i]-velCurve2->Eval(fitPeak2->GetParameter(2+3*i))));
-    feoPeakUnc2.push_back(0);
+
+    if (i<3) {
+      cout << velCurve2->Eval(fitPeak2->GetParameter(2+3*i)) << endl;
+      feoPeakUnc2.push_back(fabs(feoPeak[i]-velCurve2->Eval(fitPeak2->GetParameter(2+3*i))));
+    }
+    else {
+      cout << velCurve3->Eval(fitPeak2->GetParameter(2+3*i)) << endl;
+      feoPeakUnc2.push_back(fabs(feoPeak[i]-velCurve3->Eval(fitPeak2->GetParameter(2+3*i))));
+    }
+    feoPeakUnc.push_back(TMath::Sqrt(feoPeakUnc1[i]*feoPeakUnc1[i]+feoPeakUnc2[i]*feoPeakUnc2[i]));
 
     cout << feoPeak[i] << " +- " << feoPeakUnc1[i] << " +- " << feoPeakUnc2[i] << endl;
-
-    feoPeakUnc.push_back(TMath::Sqrt(feoPeakUnc1[i]*feoPeakUnc1[i]+feoPeakUnc2[i]*feoPeakUnc2[i]));
   }
 
   //replace with weighted averages!
 
-  Double_t dE0 = 0.5*(fabs(feoPeak[3]-feoPeak[1])+fabs(feoPeak[4]-feoPeak[2]));
-  Double_t dE0unc = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[4]*feoPeakUnc[4]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE0_1 = fabs(feoPeak[3]-feoPeak[1]);
+  Double_t dE0_2 = fabs(feoPeak[4]-feoPeak[2]);
+  Double_t dE0unc_1 = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[1]*feoPeakUnc[1]);
+  Double_t dE0unc_2 = TMath::Sqrt(feoPeakUnc[4]*feoPeakUnc[4]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE0 = (dE0_1/(dE0unc_1*dE0unc_1)+dE0_2/(dE0unc_2*dE0unc_2))/(1/(dE0unc_1*dE0unc_1)+1/(dE0unc_2*dE0unc_2));
+  Double_t dE0unc = TMath::Sqrt(1/(1/(dE0unc_1*dE0unc_1)+1/(dE0unc_2*dE0unc_2)));
 
-  Double_t dE1 = 0.5*(fabs(feoPeak[4]-feoPeak[3])+fabs(feoPeak[2]-feoPeak[1]));
-  Double_t dE1unc = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[4]*feoPeakUnc[4]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE1_1 = fabs(feoPeak[4]-feoPeak[3]);
+  Double_t dE1_2 = fabs(feoPeak[2]-feoPeak[1]);
+  Double_t dE1unc_1 = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[4]*feoPeakUnc[4]);
+  Double_t dE1unc_2 = TMath::Sqrt(feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE1 = (dE1_1/(dE1unc_1*dE1unc_1)+dE1_2/(dE1unc_2*dE1unc_2))/(1/(dE1unc_1*dE1unc_1)+1/(dE1unc_2*dE1unc_2));
+  Double_t dE1unc = TMath::Sqrt(1/(1/(dE1unc_1*dE1unc_1)+1/(dE1unc_2*dE1unc_2)));
 
-  Double_t q = 0.5*0.5*(fabs(feoPeak[1]-feoPeak[0])-fabs(feoPeak[5]-feoPeak[4]));
-  Double_t qunc = TMath::Sqrt(feoPeakUnc[0]*feoPeakUnc[0]+feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[4]*feoPeakUnc[4]+feoPeakUnc[5]*feoPeakUnc[5]);
+  Double_t q_1 = 0.5*fabs(fabs(feoPeak[1]-feoPeak[0])-dE1);
+  Double_t q_2 = 0.5*fabs(fabs(feoPeak[5]-feoPeak[4])-dE1);
+  Double_t qunc_1 = TMath::Sqrt(feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[0]*feoPeakUnc[0]+dE1unc*dE1unc);
+  Double_t qunc_2 = TMath::Sqrt(feoPeakUnc[5]*feoPeakUnc[5]+feoPeakUnc[4]*feoPeakUnc[4]+dE1unc*dE1unc);
+  Double_t q = (q_1/(qunc_1*qunc_1)+q_2/(qunc_2*qunc_2))/(1/(qunc_1*qunc_1)+1/(qunc_2*qunc_2));
+  Double_t qunc = TMath::Sqrt(1/(1/(qunc_1*qunc_1)+1/(qunc_2*qunc_2)));
 
   Double_t nomE=14.4e3;
   Double_t cLight=3e11;
@@ -173,5 +207,8 @@ void fe2o3() {
   cout << "dE0     = " << dE0*nomE/cLight << " +- " << dE0unc*nomE/cLight << endl;
   cout << "dE1     = " << dE1*nomE/cLight << " +- " << dE1unc*nomE/cLight << endl;
   cout << "q       = " << q*nomE/cLight << " +- " << qunc*nomE/cLight << endl;
+
+  cout << "mu1/mu0 = " << -3*dE1/dE0 << " +- " << -3*dE1/dE0*TMath::Sqrt((dE0unc*dE0unc)/(dE0*dE0)+(dE1unc*dE1unc)/(dE1*dE1)) << endl;
+  
 
 }
