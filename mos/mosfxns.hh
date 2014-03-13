@@ -71,12 +71,24 @@ void getVel(vector<Double_t> peak, vector<Double_t> peakunc, TF1 *velocityCurve)
 
   vector<Double_t> vel;
   vector<Double_t> velunc;
-  vel.push_back(-6.18); velunc.push_back(0.15);
-  vel.push_back(-3.64); velunc.push_back(0.15);
-  vel.push_back(-1.10); velunc.push_back(0.11);
-  vel.push_back(0.83); velunc.push_back(0.08);
-  vel.push_back(3.37); velunc.push_back(0.08);
-  vel.push_back(5.93); velunc.push_back(0.11);
+
+  if (peak.size()==6) {
+    vel.push_back(-6.18); velunc.push_back(0.15);
+    vel.push_back(-3.64); velunc.push_back(0.15);
+    vel.push_back(-1.10); velunc.push_back(0.11);
+    vel.push_back(0.83); velunc.push_back(0.08);
+    vel.push_back(3.37); velunc.push_back(0.08);
+    vel.push_back(5.93); velunc.push_back(0.11);
+  }
+  else if (peak.size()==4) {
+    vel.push_back(-3.64); velunc.push_back(0.15);
+    vel.push_back(-1.10); velunc.push_back(0.11);
+    vel.push_back(0.83); velunc.push_back(0.08);
+    vel.push_back(3.37); velunc.push_back(0.08);
+  }
+  else {
+    cout << "Not enough peaks!" << endl;
+  }
 
   TGraphErrors *velGraph = new TGraphErrors(peak.size(), &(peak[0]), &(vel[0]), &(peakunc[0]), &(velunc[0]));
 
