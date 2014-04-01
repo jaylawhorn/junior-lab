@@ -219,7 +219,7 @@ void vel_cal_2() {
 
     peakVelUnc.push_back(TMath::Sqrt(peakVelVelUnc1[i]*peakVelVelUnc1[i]+peakVelPosUnc[i]*peakVelPosUnc[i]+peakVelVelUnc2[i]*peakVelVelUnc2[i]));
     cout << "Peak " << i << ": " << peakVel[i] << " +- " << peakVelVelUnc1[i] << " +- " << peakVelVelUnc2[i] << " +- " << peakVelPosUnc[i] << "( " << peakVelUnc[i] << " )" << endl;
-    cout << "Peak " << i << ": " << peakVel[i] << " +- " << 100*peakVelVelUnc1[i]/peakVel[i] << "% +- " << 100*peakVelVelUnc2[i]/peakVel[i] << "% +- " << 100*peakVelPosUnc[i]/peakVel[i] << "% ( " << 100*peakVelUnc[i]/peakVel[i] << "% )" << endl;
+    cout << "Peak " << i << ": " << peakVel[i] << " +- " << peakVelVelUnc1[i]/peakVel[i] << " +- " << peakVelVelUnc2[i]/peakVel[i] << " +- " << peakVelPosUnc[i]/peakVel[i] << "( " << peakVelUnc[i]/peakVel[i] << " )" << endl;
 
   }
 

@@ -103,7 +103,7 @@ void velocity_test() {
 
   for (Int_t i=0; i<6; i++) {
     cout << velCurve->Eval(peakPos[i]) << " " << vel[i] << " " << 100*(velCurve->Eval(peakPos[i])-vel[i])/velCurve->Eval(peakPos[i]) << endl;
-    cout << getVelUnc(velCurve->Eval(peakPos[i])) << endl;
+    cout << getVelUnc(peakPos[i]) << endl;
   }
   
 }

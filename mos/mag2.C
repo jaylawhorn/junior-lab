@@ -31,7 +31,7 @@
 #include "plotStyle.hh"
 #endif
 
-void fe2o3() {
+void mag2() {
 
   TCanvas *c1 = MakeCanvas("c1", "c1", 800, 600);
   TGaxis::SetMaxDigits(4);

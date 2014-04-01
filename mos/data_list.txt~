@@ -16,7 +16,7 @@ data/enriched_fe_311_2.csv		4
 data/short_moved_close_3_7.csv  	5
 data/fe2o3.csv  			6
 data/first_with_disc.csv		99
-data/disc_setting.csv			999
+data/disc_setting.csv			0
 data/zee_enrich_57fe_0.csv		0
 data/zee_enrich_57fe_1.csv		0
 data/Na4FeCN6_311_1_overnight.csv	7
