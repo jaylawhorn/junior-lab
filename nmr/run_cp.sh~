@@ -1,8 +1,0 @@
-#!/bin/bash
-
-for file in `ls data/Carr-Purcell_glycerine/*csv`
-do
-
-    root -l -q carrPurcell.C+\(\"${file}\"\)
-
-done
