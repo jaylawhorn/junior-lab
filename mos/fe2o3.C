@@ -43,7 +43,7 @@ void fe2o3() {
   confParse("data_list.txt", 6, feQuad);
 
   feVel->SetTitle("");
-  feVel->GetXaxis()->SetTitle("Channel");
+  feVel->GetXaxis()->SetTitle("MCA Channel");
   feVel->GetYaxis()->SetTitle("Counts");
   feVel->GetXaxis()->SetNdivisions(8,5,0);
   feVel->SetLineColor(kRed);
@@ -77,9 +77,11 @@ void fe2o3() {
   fitPeak->SetParameter(17, 1600);
   fitPeak->SetParameter(18, 15);
 
-  fitPeak->SetLineColor(kBlue);
+  //fitPeak->SetLineColor(kBlue);
 
-  feVel->Fit("fitPeak", "RN");
+  feVel->Fit("fitPeak", "R");
+
+  c1->SaveAs("calforfe2o3.png");
 
   vector<Double_t> peakPos;
   vector<Double_t> peakPosUnc;
@@ -94,14 +96,14 @@ void fe2o3() {
   TF1 *velCurve = new TF1("velCurve", "[0]*x+[1]*x^2+[2]", 200, 2040);
   getVel(peakPos, peakPosUnc, velCurve);
 
-  velCurve->SetLineColor(kBlue);
+  //velCurve->SetLineColor(kBlue);
 
   velCurve->Draw("same");
 
   c1->SaveAs("fe2o3_velcurves.png");
 
   feQuad->SetTitle("");
-  feQuad->GetXaxis()->SetTitle("Channel");
+  feQuad->GetXaxis()->SetTitle("MCA Bin");
   feQuad->GetYaxis()->SetTitle("Counts");
   feQuad->GetXaxis()->SetNdivisions(8,5,0);
   feQuad->SetLineColor(kRed);
@@ -135,7 +137,7 @@ void fe2o3() {
   fitPeak2->SetParameter(17, 2000);
   fitPeak2->SetParameter(18, 15);
 
-  fitPeak2->SetLineColor(kBlue);
+  //fitPeak2->SetLineColor(kBlue);
 
   feQuad->Fit("fitPeak2", "R");
 
@@ -146,12 +148,16 @@ void fe2o3() {
   vector<Double_t> feoPeakUnc2;
   vector<Double_t> feoPeakUnc;
 
+  Double_t temp=0;
+
   for (Int_t i=0; i<6; i++) {
     feoPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2+3*i)));
-
-    feoPeakUnc1.push_back(TMath::Max(fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))), fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))))); 
+    temp = TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i)));
+    feoPeakUnc1.push_back(TMath::Max(fabs(velCurve->Eval(feoPeak[i])-velCurve->Eval(feoPeak[i]+temp)), fabs(velCurve->Eval(feoPeak[i])-velCurve->Eval(feoPeak[i]-temp))));
+    //feoPeakUnc1.push_back(TMath::Max(fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))), fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))))); 
     feoPeakUnc2.push_back(getVelUnc(velCurve->Eval(fitPeak2->GetParameter(2+3*i))));
     feoPeakUnc.push_back(TMath::Sqrt(feoPeakUnc1[i]*feoPeakUnc1[i]+feoPeakUnc2[i]*feoPeakUnc2[i]));
+
   }
 
   for (Int_t i=0; i<6; i++) {
@@ -184,6 +190,14 @@ void fe2o3() {
   Double_t nomE=14.4e3;
   Double_t cLight=3e11;
 
+  Double_t cog=0;
+  Double_t cogunc=0;
+
+  for (Int_t i=0; i<6; i++) {
+    cog+=feoPeak[i];
+    cogunc+=feoPeakUnc[i]*feoPeakUnc[i];
+  }
+
   cout << "Fe2O3 deltaV [mm/s]" << endl;
   cout << "dE1+2Q  = " << fabs(feoPeak[1]-feoPeak[0]) << endl;
   cout << "dE1     = " << fabs(feoPeak[4]-feoPeak[3]) << endl;
@@ -199,6 +213,7 @@ void fe2o3() {
   cout << "q       = " << q*nomE/cLight << " +- " << qunc*nomE/cLight << endl;
 
   cout << "mu1/mu0 = " << -3*dE1/dE0 << " +- " << -3*dE1/dE0*TMath::Sqrt((dE0unc*dE0unc)/(dE0*dE0)+(dE1unc*dE1unc)/(dE1*dE1)) << endl;
-  
+
+  cout << "iso     = " << cog*nomE/(6*cLight) << " " <<  TMath::Sqrt(cogunc)*nomE/cLight << endl;
 
 }

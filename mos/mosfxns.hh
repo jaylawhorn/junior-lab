@@ -111,7 +111,7 @@ Double_t getVelUnc(Double_t peak) {
   vel.push_back(5.92); velunc.push_back(0.11);
 
   TGraph *vvsu = new TGraph(6, &vel[0], &velunc[0]);
-  TF1 *gunc = new TF1("gunc", "[0]+[1]*x+[2]*x^2", -10, 10);
+  TF1 *gunc = new TF1("gunc", "[0]+[2]*x^2", -10, 10);
 
   vvsu->Fit("gunc");
 

@@ -60,10 +60,16 @@ void vel_cal_2() {
   confParse("data_list.txt", 3, inf);
   confParse("data_list.txt", 4, fe);
 
+  //TF1 *blah = new TF1("blah", "[0]", 0, 2048);
+  //blah->SetParameter(0,1);
+
+  //inf->Multiply(blah, lambda/(2*nPasses*dwell));
+
+  inf->SetLineColor(kRed);
   inf->SetTitle("");
   inf->GetXaxis()->SetTitle("MCA Bin");
   inf->GetXaxis()->SetNdivisions(8,5,0);
-  inf->GetYaxis()->SetTitle("Counts");
+  inf->GetYaxis()->SetTitle("Velocity [mm/s]");
 
   fe->SetTitle("");
   fe->GetXaxis()->SetTitle("MCA Bin");
@@ -115,10 +121,12 @@ void vel_cal_2() {
   fitPeak->SetParameter(17, 1600);
   fitPeak->SetParameter(18, 15);
 
-  fitNom->SetLineColor(kBlue);
   fitParts1->SetLineColor(kGreen);
   fitParts2->SetLineColor(kGreen);
-  //fitPeak->SetLineColor(kBlue);
+
+  TGraph *residual1 = new TGraph();
+  TGraph *residual2 = new TGraph();
+  TGraph *residual3 = new TGraph();
 
   TF1 *test = new TF1("test", "fitNom-fitExt", loLim, upLim);
 
@@ -126,9 +134,41 @@ void vel_cal_2() {
   inf->Fit("fitExt", "RN");
   inf->Fit("fitParts1", "RN");
   inf->Fit("fitParts2", "RN");
-  
-  fitNom->Draw("same");
 
+  TF1 *diffPart = new TF1("diffPart", diff, loLim, upLim, 0);
+  Double_t b = diffPart->GetMinimumX();
+
+  for (Int_t i=0; i<(upLim-loLim); i++) {
+    residual1->SetPoint(i, loLim+i, (fitNom->Eval(loLim+i)-inf->GetBinContent(loLim+i))/inf->GetBinContent(loLim+i));
+    //residual1->SetPoint(i, loLim+i, (fitNom->Eval(loLim+i)-inf->GetBinContent(loLim+i)));
+    residual2->SetPoint(i, loLim+i, (fitExt->Eval(loLim+i)-inf->GetBinContent(loLim+i))/fitExt->Eval(loLim+i));
+    if ((loLim+i)<b) {
+      residual3->SetPoint(i, loLim+i, (fitParts1->Eval(loLim+i)-inf->GetBinContent(loLim+i))/inf->GetBinContent(loLim+i));
+      //residual3->SetPoint(i, loLim+i, (fitParts1->Eval(loLim+i)-inf->GetBinContent(loLim+i)));
+    }
+    else {
+      residual3->SetPoint(i, loLim+i, (fitParts2->Eval(loLim+i)-inf->GetBinContent(loLim+i))/inf->GetBinContent(loLim+i));
+      //residual3->SetPoint(i, loLim+i, (fitParts2->Eval(loLim+i)-inf->GetBinContent(loLim+i)));
+    }
+  }
+
+  fitNom->Draw("same");
+  /*
+  TCanvas *c2 = MakeCanvas("c2", "c2", 600, 600);
+  c2->Divide(1,2);
+  c2->cd(1);
+  //residual1->GetYaxis()->SetRangeUser(-1.5,0.5);
+  residual1->Draw("al");
+  cout << residual1->GetMean(2) << endl;
+  c2->cd(2);
+  //residual2->GetYaxis()->SetRangeUser(-1.5,0.5);
+  //residual2->Draw("al");
+  //c2->cd(3);
+  //residual3->GetYaxis()->SetRangeUser(-1.5,0.5);
+  residual3->Draw("al");
+  cout << residual3->GetMean(2) << endl;
+  */
+  
   c1->SaveAs("inter.png");
 
   cout << "From choice of end point" << endl;
@@ -148,7 +188,7 @@ void vel_cal_2() {
 
   c1->SaveAs("fePeaks.png");
 
-  Double_t b = fitNom->GetParameter(1);
+  b = fitNom->GetParameter(1);
   Double_t c = fitNom->GetParameter(2);
   Double_t d = fitNom->GetParameter(3);
 
@@ -166,7 +206,6 @@ void vel_cal_2() {
   velExt->SetParameter(1, c);
   velExt->SetParameter(2, d*lambda/(2*nPasses*dwell));
 
-  TF1 *diffPart = new TF1("diffPart", diff, loLim, upLim, 0);
   b = diffPart->GetMinimumX();
 
   TF1 *velPart1 = new TF1("velPart1", "[0]*(x-[1])+[2]", loLim, upLim);
@@ -218,13 +257,15 @@ void vel_cal_2() {
   for (Int_t i=0; i<6; i++) {
 
     peakVelUnc.push_back(TMath::Sqrt(peakVelVelUnc1[i]*peakVelVelUnc1[i]+peakVelPosUnc[i]*peakVelPosUnc[i]+peakVelVelUnc2[i]*peakVelVelUnc2[i]));
-    cout << "Peak " << i << ": " << peakVel[i] << " +- " << peakVelVelUnc1[i] << " +- " << peakVelVelUnc2[i] << " +- " << peakVelPosUnc[i] << "( " << peakVelUnc[i] << " )" << endl;
-    cout << "Peak " << i << ": " << peakVel[i] << " +- " << 100*peakVelVelUnc1[i]/peakVel[i] << "% +- " << 100*peakVelVelUnc2[i]/peakVel[i] << "% +- " << 100*peakVelPosUnc[i]/peakVel[i] << "% ( " << 100*peakVelUnc[i]/peakVel[i] << "% )" << endl;
+    cout <<  peakVel[i] << " \\pm " << peakVelVelUnc1[i] << " \\pm " << peakVelVelUnc2[i] << " \\pm " << peakVelPosUnc[i] << endl; //"( " << peakVelUnc[i] << " )" << endl;
+    //cout <<   peakVel[i] << " \\pm " << 100*peakVelVelUnc1[i]/peakVel[i] << "% +- " << 100*peakVelVelUnc2[i]/peakVel[i] << "% +- " << 100*peakVelPosUnc[i]/peakVel[i] << "% ( " << 100*peakVelUnc[i]/peakVel[i] << "% )" << endl;
 
   }
 
   vector<Double_t> peakEn;
   vector<Double_t> peakEnUnc;
+  Double_t cog=0;
+  Double_t cogunc=0;
 
   cout << " dE " << endl;
 
@@ -232,10 +273,18 @@ void vel_cal_2() {
     peakEn.push_back(nomE*peakVel[i]/cLight);
     peakEnUnc.push_back(nomE*peakVelUnc[i]/cLight);
     cout << "Peak " << i << ": " << nomE*peakVel[i]/cLight << " +- " << nomE*peakVelUnc[i]/cLight << endl;
+    if (i<3) cog-=nomE*peakVel[i]/cLight;
+    else cog+=nomE*peakVel[i]/cLight;
+    cogunc+=(nomE*peakVelUnc[i]/cLight)*(nomE*peakVelUnc[i]/cLight);
   }
+
+  cout << "Center of gravity: " << cog/6 << "\\pm" << TMath::Sqrt(cogunc) << endl;
 
   vector<Double_t> g1;
   vector<Double_t> dg1;
+
+  Double_t h0= peakEn[5]+peakEn[0];
+  Double_t h0unc= TMath::Sqrt(peakEn[5]*peakEn[5]+peakEn[0]*peakEn[0]);
 
   g1.push_back(peakEn[0]-peakEn[1]);
   g1.push_back(peakEn[1]-peakEn[2]);
@@ -282,6 +331,7 @@ void vel_cal_2() {
   Double_t mu0 = 0.0903;
   Double_t mu0_unc = 0.0007;
 
+  cout << "hin     = " << h0 << " +- " << h0unc << endl;
   cout << "g1      = " << avg_g1 << " +- " << std_g1 << endl;
   cout << "g0      = " << avg_g0 << " +- " << std_g0 << endl;
   cout << "mu1/mu0 = " << mu_rat << " +- " << mu_rat_unc << endl;

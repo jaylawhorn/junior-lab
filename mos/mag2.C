@@ -37,17 +37,16 @@ void mag2() {
   TGaxis::SetMaxDigits(4);
 
   TH1D *feVel = new TH1D("feVel", "feVel", 2048, 0, 2048);
-  TH1D *feQuad = new TH1D("feQuad", "feQuad", 2048, 0, 2048);
+  TH1D *feMag = new TH1D("feMag", "feMag", 2048, 0, 2048);
 
   confParse("data_list.txt", 5, feVel);
-  confParse("data_list.txt", 6, feQuad);
+  confParse("data_list.txt", 13, feMag);
 
   feVel->SetTitle("");
   feVel->GetXaxis()->SetTitle("Channel");
   feVel->GetYaxis()->SetTitle("Counts");
-  feVel->GetXaxis()->SetNdivisions(8,5,0);
   feVel->SetLineColor(kRed);
-  //feVel->Draw();
+  feVel->Draw();
 
   TF1 *fitPeak = new TF1("fitPeak", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)-[7]*([9]/2)^2/((x-[8])^2+([9]/2)^2)-[10]*([12]/2)^2/((x-[11])^2+([12]/2)^2)-[13]*([15]/2)^2/((x-[14])^2+([15]/2)^2)-[16]*([18]/2)^2/((x-[17])^2+([18]/2)^2)-[19]*(x-[20])**2",200, 2040);
 
@@ -77,7 +76,7 @@ void mag2() {
   fitPeak->SetParameter(17, 1600);
   fitPeak->SetParameter(18, 15);
 
-  fitPeak->SetLineColor(kBlue);
+  //fitPeak->SetLineColor(kBlue);
 
   feVel->Fit("fitPeak", "RN");
 
@@ -92,103 +91,181 @@ void mag2() {
   peakPos.push_back(fitPeak->GetParameter(17)); peakPosUnc.push_back(TMath::Sqrt(fabs(fitPeak->GetParameter(18))));
 
   TF1 *velCurve = new TF1("velCurve", "[0]*x+[1]*x^2+[2]", 200, 2040);
+  TF1 *velCurve2 = new TF1("velCurve2", "[0]*x+[1]", 200, peakPos[2]+50);
+  TF1 *velCurve3 = new TF1("velCurve3", "[0]*x+[1]", peakPos[3]-50, 2040);
   getVel(peakPos, peakPosUnc, velCurve);
+  getVel(peakPos, peakPosUnc, velCurve2);
+  getVel(peakPos, peakPosUnc, velCurve3);
 
   velCurve->SetLineColor(kBlue);
+  velCurve2->SetLineColor(kGreen);
+  velCurve3->SetLineColor(kGreen);
 
   velCurve->Draw("same");
+  velCurve2->Draw("same");
+  velCurve3->Draw("same");
 
-  c1->SaveAs("fe2o3_velcurves.png");
+  c1->SaveAs("mag_velcurves.png");
 
-  feQuad->SetTitle("");
-  feQuad->GetXaxis()->SetTitle("Channel");
-  feQuad->GetYaxis()->SetTitle("Counts");
-  feQuad->GetXaxis()->SetNdivisions(8,5,0);
-  feQuad->SetLineColor(kRed);
-  feQuad->Draw();
+  feMag->SetTitle("");
+  feMag->GetXaxis()->SetTitle("Channel");
+  feMag->GetXaxis()->SetNdivisions(8,5,0);
+  feMag->GetYaxis()->SetTitle("Counts");
+  feMag->SetLineColor(kRed);
+  feMag->Draw();
 
-  TF1 *fitPeak2 = new TF1("fitPeak2", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)-[7]*([9]/2)^2/((x-[8])^2+([9]/2)^2)-[10]*([12]/2)^2/((x-[11])^2+([12]/2)^2)-[13]*([15]/2)^2/((x-[14])^2+([15]/2)^2)-[16]*([18]/2)^2/((x-[17])^2+([18]/2)^2)-[19]*(x-[20])**2",150, 2040);
+  TF1 *fitPeak2 = new TF1("fitPeak2", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)-[7]*([9]/2)^2/((x-[8])^2+([9]/2)^2)-[10]*([12]/2)^2/((x-[11])^2+([12]/2)^2)-[13]*([15]/2)^2/((x-[14])^2+([15]/2)^2)-[16]*([18]/2)^2/((x-[17])^2+([18]/2)^2)-[19]*([21]/2)^2/((x-[20])^2+([21]/2)^2)-[22]*([24]/2)^2/((x-[23])^2+([24]/2)^2)-[25]*([27]/2)^2/((x-[26])^2+([27]/2)^2)-[28]*(x-[29])**2-[30]*([32]/2)^2/((x-[31])^2+([32]/2)^2)",150, 2040);
 
-  fitPeak2->SetParameter(0, 34000);
+  TF1 *fitPeak3 = new TF1("fitPeak3", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)",500, 900);
+  
+  fitPeak2->SetParameter(0, 16000);
+  fitPeak3->SetParameter(0, 16000);
 
   fitPeak2->SetParameter(1, 20);
   fitPeak2->SetParameter(2, 250);
   fitPeak2->SetParameter(3, 15);
 
   fitPeak2->SetParameter(4, 20);
-  fitPeak2->SetParameter(5, 600);
+  fitPeak2->SetParameter(5, 400);
   fitPeak2->SetParameter(6, 15);
 
   fitPeak2->SetParameter(7, 200);
-  fitPeak2->SetParameter(8, 900);
+  fitPeak2->SetParameter(8, 600);
   fitPeak2->SetParameter(9, 15);
 
   fitPeak2->SetParameter(10, 20);
-  fitPeak2->SetParameter(11, 1200);
+  fitPeak2->SetParameter(11, 650);
   fitPeak2->SetParameter(12, 15);
 
+  fitPeak3->SetParameter(1, 200);
+  fitPeak3->SetParameter(2, 600);
+  fitPeak3->SetParameter(3, 15);
+
+  fitPeak3->SetParameter(4, 20);
+  fitPeak3->SetParameter(5, 680);
+  fitPeak3->SetParameter(6, 15);
+
   fitPeak2->SetParameter(13, 20);
-  fitPeak2->SetParameter(14, 1600);
+  fitPeak2->SetParameter(14, 900);
   fitPeak2->SetParameter(15, 15);
 
   fitPeak2->SetParameter(16, 20);
-  fitPeak2->SetParameter(17, 2000);
+  fitPeak2->SetParameter(17, 1100);
   fitPeak2->SetParameter(18, 15);
 
-  fitPeak2->SetLineColor(kBlue);
+  fitPeak2->SetParameter(19, 30);
+  fitPeak2->SetParameter(20, 1210);
+  fitPeak2->SetParameter(21, 20);
 
-  feQuad->Fit("fitPeak2", "R");
+  fitPeak2->SetParameter(22, 20);
+  fitPeak2->SetParameter(23, 1600);
+  fitPeak2->SetParameter(24, 15);
 
-  c1->SaveAs("fe2o3_peaks.png");
+  fitPeak2->SetParameter(25, 20);
+  fitPeak2->SetParameter(26, 2000);
+  fitPeak2->SetParameter(27, 15);
 
-  vector<Double_t> feoPeak;
-  vector<Double_t> feoPeakUnc1;
-  vector<Double_t> feoPeakUnc2;
-  vector<Double_t> feoPeakUnc;
+  fitPeak2->SetParameter(28, 0);
+  fitPeak2->SetParameter(29, 0);
 
-  for (Int_t i=0; i<6; i++) {
-    feoPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2+3*i)));
+  fitPeak2->SetParameter(30, 20);
+  fitPeak2->SetParameter(31, 1130);
+  fitPeak2->SetParameter(32, 10);
 
-    feoPeakUnc1.push_back(TMath::Max(fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))), fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))))); 
-    feoPeakUnc2.push_back(getVelUnc(velCurve->Eval(fitPeak2->GetParameter(2+3*i))));
-    feoPeakUnc.push_back(TMath::Sqrt(feoPeakUnc1[i]*feoPeakUnc1[i]+feoPeakUnc2[i]*feoPeakUnc2[i]));
+  feMag->Fit("fitPeak2", "RM");
+  feMag->Fit("fitPeak3", "RN");
+  //fitPeak3->Draw("same");
+
+  c1->SaveAs("mag_peaks.png");
+
+  vector<Double_t> magPeak;
+  vector<Double_t> magPeakUnc1;
+  vector<Double_t> magPeakUnc2;
+  vector<Double_t> magPeakUnc;
+
+  for (Int_t i=2; i<29; i+=3) {
+    cout << i << " " <<  fitPeak2->GetParameter(i) << "\\pm" << TMath::Sqrt(fabs(fitPeak2->GetParameter(i+1))) << endl;
   }
+  cout << "31 " << fitPeak2->GetParameter(31) << "\\pm" << TMath::Sqrt(fabs(fitPeak2->GetParameter(31+1))) << endl;
 
-  for (Int_t i=0; i<6; i++) {
-    cout << feoPeak[i] << " +- " << feoPeakUnc1[i] << " +- " << feoPeakUnc2[i] << endl;
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(5)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(8)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(11)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(17)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(31)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(20)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(23)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(26)));
+
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[0]-velCurve->Eval(fitPeak2->GetParameter(2)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3))))), fabs(magPeak[0]-velCurve->Eval(fitPeak2->GetParameter(2)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[1]-velCurve->Eval(fitPeak2->GetParameter(5)+TMath::Sqrt(fabs(fitPeak2->GetParameter(6))))), fabs(magPeak[1]-velCurve->Eval(fitPeak2->GetParameter(5)-TMath::Sqrt(fabs(fitPeak2->GetParameter(6))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[2]-velCurve->Eval(fitPeak2->GetParameter(8)+TMath::Sqrt(fabs(fitPeak2->GetParameter(9))))), fabs(magPeak[2]-velCurve->Eval(fitPeak2->GetParameter(8)-TMath::Sqrt(fabs(fitPeak2->GetParameter(9))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[3]-velCurve->Eval(fitPeak2->GetParameter(17)+TMath::Sqrt(fabs(fitPeak2->GetParameter(18))))), fabs(magPeak[3]-velCurve->Eval(fitPeak2->GetParameter(17)-TMath::Sqrt(fabs(fitPeak2->GetParameter(18))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[4]-velCurve->Eval(fitPeak2->GetParameter(14)+TMath::Sqrt(fabs(fitPeak2->GetParameter(15))))), fabs(magPeak[4]-velCurve->Eval(fitPeak2->GetParameter(14)-TMath::Sqrt(fabs(fitPeak2->GetParameter(15))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[5]-velCurve->Eval(fitPeak2->GetParameter(31)+TMath::Sqrt(fabs(fitPeak2->GetParameter(32))))), fabs(magPeak[5]-velCurve->Eval(fitPeak2->GetParameter(31)-TMath::Sqrt(fabs(fitPeak2->GetParameter(32))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[6]-velCurve->Eval(fitPeak2->GetParameter(20)+TMath::Sqrt(fabs(fitPeak2->GetParameter(21))))), fabs(magPeak[6]-velCurve->Eval(fitPeak2->GetParameter(20)-TMath::Sqrt(fabs(fitPeak2->GetParameter(21))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[7]-velCurve->Eval(fitPeak2->GetParameter(23)+TMath::Sqrt(fabs(fitPeak2->GetParameter(24))))), fabs(magPeak[7]-velCurve->Eval(fitPeak2->GetParameter(23)-TMath::Sqrt(fabs(fitPeak2->GetParameter(24))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[8]-velCurve->Eval(fitPeak2->GetParameter(26)+TMath::Sqrt(fabs(fitPeak2->GetParameter(27))))), fabs(magPeak[8]-velCurve->Eval(fitPeak2->GetParameter(26)-TMath::Sqrt(fabs(fitPeak2->GetParameter(27))))))); 
+
+  magPeakUnc2.push_back(fabs(magPeak[0]-velCurve2->Eval(fitPeak2->GetParameter(2)))); 
+  magPeakUnc2.push_back(fabs(magPeak[1]-velCurve2->Eval(fitPeak2->GetParameter(5)))); 
+  magPeakUnc2.push_back(fabs(magPeak[2]-velCurve2->Eval(fitPeak2->GetParameter(8)))); 
+  magPeakUnc2.push_back(fabs(magPeak[3]-velCurve2->Eval(fitPeak2->GetParameter(11)))); 
+  magPeakUnc2.push_back(fabs(magPeak[4]-velCurve2->Eval(fitPeak2->GetParameter(17)))); 
+  magPeakUnc2.push_back(fabs(magPeak[5]-velCurve2->Eval(fitPeak2->GetParameter(31)))); 
+  magPeakUnc2.push_back(fabs(magPeak[6]-velCurve2->Eval(fitPeak2->GetParameter(20)))); 
+  magPeakUnc2.push_back(fabs(magPeak[7]-velCurve2->Eval(fitPeak2->GetParameter(23)))); 
+  magPeakUnc2.push_back(fabs(magPeak[8]-velCurve2->Eval(fitPeak2->GetParameter(26)))); 
+
+  for (Int_t i=0; i<magPeak.size(); i++) {
+    magPeakUnc.push_back(TMath::Sqrt(magPeakUnc1[i]*magPeakUnc1[i]+magPeakUnc2[i]*magPeakUnc2[i]));
+
+    cout << magPeak[i] << " \\pm " << magPeakUnc1[i] << " \\pm " << magPeakUnc2[i] << endl;
+
   }
 
   //replace with weighted averages!
-
-  Double_t dE0_1 = fabs(feoPeak[3]-feoPeak[1]);
-  Double_t dE0_2 = fabs(feoPeak[4]-feoPeak[2]);
-  Double_t dE0unc_1 = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[1]*feoPeakUnc[1]);
-  Double_t dE0unc_2 = TMath::Sqrt(feoPeakUnc[4]*feoPeakUnc[4]+feoPeakUnc[2]*feoPeakUnc[2]);
+  /*
+  Double_t dE0_1 = fabs(magPeak[6]-magPeak[2]);
+  Double_t dE0_2 = fabs(magPeak[7]-magPeak[4]);
+  Double_t dE0unc_1 = TMath::Sqrt(magPeakUnc[6]*magPeakUnc[6]+magPeakUnc[2]*magPeakUnc[2]);
+  Double_t dE0unc_2 = TMath::Sqrt(magPeakUnc[7]*magPeakUnc[7]+magPeakUnc[4]*magPeakUnc[4]);
   Double_t dE0 = (dE0_1/(dE0unc_1*dE0unc_1)+dE0_2/(dE0unc_2*dE0unc_2))/(1/(dE0unc_1*dE0unc_1)+1/(dE0unc_2*dE0unc_2));
   Double_t dE0unc = TMath::Sqrt(1/(1/(dE0unc_1*dE0unc_1)+1/(dE0unc_2*dE0unc_2)));
 
-  Double_t dE1_1 = fabs(feoPeak[4]-feoPeak[3]);
-  Double_t dE1_2 = fabs(feoPeak[2]-feoPeak[1]);
-  Double_t dE1unc_1 = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[4]*feoPeakUnc[4]);
-  Double_t dE1unc_2 = TMath::Sqrt(feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE1_1 = fabs(magPeak[4]-magPeak[3]);
+  Double_t dE1_2 = fabs(magPeak[2]-magPeak[1]);
+  Double_t dE1unc_1 = TMath::Sqrt(magPeakUnc[3]*magPeakUnc[3]+magPeakUnc[4]*magPeakUnc[4]);
+  Double_t dE1unc_2 = TMath::Sqrt(magPeakUnc[1]*magPeakUnc[1]+magPeakUnc[2]*magPeakUnc[2]);
   Double_t dE1 = (dE1_1/(dE1unc_1*dE1unc_1)+dE1_2/(dE1unc_2*dE1unc_2))/(1/(dE1unc_1*dE1unc_1)+1/(dE1unc_2*dE1unc_2));
   Double_t dE1unc = TMath::Sqrt(1/(1/(dE1unc_1*dE1unc_1)+1/(dE1unc_2*dE1unc_2)));
 
-  Double_t q_1 = 0.5*fabs(fabs(feoPeak[1]-feoPeak[0])-dE1);
-  Double_t q_2 = 0.5*fabs(fabs(feoPeak[5]-feoPeak[4])-dE1);
-  Double_t qunc_1 = TMath::Sqrt(feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[0]*feoPeakUnc[0]+dE1unc*dE1unc);
-  Double_t qunc_2 = TMath::Sqrt(feoPeakUnc[5]*feoPeakUnc[5]+feoPeakUnc[4]*feoPeakUnc[4]+dE1unc*dE1unc);
-  Double_t q = (q_1/(qunc_1*qunc_1)+q_2/(qunc_2*qunc_2))/(1/(qunc_1*qunc_1)+1/(qunc_2*qunc_2));
-  Double_t qunc = TMath::Sqrt(1/(1/(qunc_1*qunc_1)+1/(qunc_2*qunc_2)));
-
   Double_t nomE=14.4e3;
   Double_t cLight=3e11;
+  */
+  //cout << "AB" << endl;
+  cout << "dE8     = " << fabs(magPeak[8]-magPeak[7]) << endl;
+  cout << "dE7     = " << fabs(magPeak[7]-magPeak[6]) << endl;
+  cout << "dE5     = " << fabs(magPeak[5]-magPeak[3]) << endl;
+  cout << "dE4     = " << fabs(magPeak[4]-magPeak[3]) << endl;
+  cout << "dE2     = " << fabs(magPeak[3]-magPeak[1]) << endl;
+  cout << "dE1     = " << fabs(magPeak[3]-magPeak[0]) << endl;
+  //cout << "A" << endl;
+  /* cout << "dE1     = " << fabs(magPeak[4]-magPeak[2]) << endl;
+  cout << "dE1     = " << fabs(magPeak[2]-magPeak[0]) << endl;
+  //cout << "B" << endl;
+  cout << "dE1     = " << fabs(magPeak[3]-magPeak[1]) << endl;
+  cout << "dE1     = " << fabs(magPeak[5]-magPeak[3]) << endl;
 
-  cout << "Fe2O3 deltaV [mm/s]" << endl;
-  cout << "dE1+2Q  = " << fabs(feoPeak[1]-feoPeak[0]) << endl;
-  cout << "dE1     = " << fabs(feoPeak[4]-feoPeak[3]) << endl;
-  cout << "dE1     = " << fabs(feoPeak[2]-feoPeak[1]) << endl;
-  cout << "dE1-2Q  = " << fabs(feoPeak[5]-feoPeak[4]) << endl;
+  //cout << "A" << endl;
+  cout << "dE0     = " << fabs(magPeak[6]-magPeak[2]) << endl;
+  cout << "dE0     = " << fabs(magPeak[7]-magPeak[4]) << endl;
+  //cout << "B" << endl;
+  cout << "dE0     = " << fabs(magPeak[6]-magPeak[3]) << endl;
+  cout << "dE0     = " << fabs(magPeak[7]-magPeak[5]) << endl;
+  */
+  /*
   cout << "----------" << endl;
   cout << "dE0     = " << dE0 << " +- " << dE0unc << endl;
   cout << "dE1     = " << dE1 << " +- " << dE1unc << endl;
@@ -199,6 +276,5 @@ void mag2() {
   cout << "q       = " << q*nomE/cLight << " +- " << qunc*nomE/cLight << endl;
 
   cout << "mu1/mu0 = " << -3*dE1/dE0 << " +- " << -3*dE1/dE0*TMath::Sqrt((dE0unc*dE0unc)/(dE0*dE0)+(dE1unc*dE1unc)/(dE1*dE1)) << endl;
-  
-
+  */
 }

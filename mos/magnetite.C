@@ -105,7 +105,7 @@ void magnetite() {
   velCurve2->Draw("same");
   velCurve3->Draw("same");
 
-  c1->SaveAs("fe2o3_velcurves.png");
+  c1->SaveAs("mag_velcurves.png");
 
   feMag->SetTitle("");
   feMag->GetXaxis()->SetTitle("Channel");
@@ -116,7 +116,7 @@ void magnetite() {
 
   TF1 *fitPeak2 = new TF1("fitPeak2", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)-[7]*([9]/2)^2/((x-[8])^2+([9]/2)^2)-[10]*([12]/2)^2/((x-[11])^2+([12]/2)^2)-[13]*([15]/2)^2/((x-[14])^2+([15]/2)^2)-[16]*([18]/2)^2/((x-[17])^2+([18]/2)^2)-[19]*([21]/2)^2/((x-[20])^2+([21]/2)^2)-[22]*([24]/2)^2/((x-[23])^2+([24]/2)^2)-[25]*([27]/2)^2/((x-[26])^2+([27]/2)^2)-[28]*(x-[29])**2-[30]*([32]/2)^2/((x-[31])^2+([32]/2)^2)",150, 2040);
 
-  TF1 *fitPeak3 = new TF1("fitPeak3", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)",500, 800);
+  TF1 *fitPeak3 = new TF1("fitPeak3", "[0]-[1]*([3]/2)^2/((x-[2])^2+([3]/2)^2)-[4]*([6]/2)^2/((x-[5])^2+([6]/2)^2)",500, 900);
   
   fitPeak2->SetParameter(0, 34000);
   fitPeak3->SetParameter(0, 34000);
@@ -178,55 +178,88 @@ void magnetite() {
 
   c1->SaveAs("mag_peaks.png");
 
-  vector<Double_t> feoPeak;
-  vector<Double_t> feoPeakUnc1;
-  vector<Double_t> feoPeakUnc2;
-  vector<Double_t> feoPeakUnc;
+  vector<Double_t> magPeak;
+  vector<Double_t> magPeakUnc1;
+  vector<Double_t> magPeakUnc2;
+  vector<Double_t> magPeakUnc;
 
   for (Int_t i=2; i<29; i+=3) {
-    cout << fitPeak2->GetParameter(i) << endl;
+    cout << i << " " <<  fitPeak2->GetParameter(i) << "\pm" << TMath::Sqrt(fabs(fitPeak2->GetParameter(i+1))) << endl;
   }
-    cout << fitPeak2->GetParameter(31) << endl;
+  cout << "31 " << fitPeak2->GetParameter(31) << "\pm" << TMath::Sqrt(fabs(fitPeak2->GetParameter(31+1))) << endl;
 
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(5)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(11)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(14)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(31)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(20)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(23)));
+  magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(26)));
 
-  for (Int_t i=0; i<6; i++) {
-    feoPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2+3*i)));
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[0]-velCurve->Eval(fitPeak2->GetParameter(2)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3))))), fabs(magPeak[0]-velCurve->Eval(fitPeak2->GetParameter(2)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[1]-velCurve->Eval(fitPeak2->GetParameter(5)+TMath::Sqrt(fabs(fitPeak2->GetParameter(6))))), fabs(magPeak[1]-velCurve->Eval(fitPeak2->GetParameter(5)-TMath::Sqrt(fabs(fitPeak2->GetParameter(6))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[2]-velCurve->Eval(fitPeak2->GetParameter(11)+TMath::Sqrt(fabs(fitPeak2->GetParameter(12))))), fabs(magPeak[2]-velCurve->Eval(fitPeak2->GetParameter(11)-TMath::Sqrt(fabs(fitPeak2->GetParameter(12))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[3]-velCurve->Eval(fitPeak2->GetParameter(14)+TMath::Sqrt(fabs(fitPeak2->GetParameter(15))))), fabs(magPeak[3]-velCurve->Eval(fitPeak2->GetParameter(14)-TMath::Sqrt(fabs(fitPeak2->GetParameter(15))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[4]-velCurve->Eval(fitPeak2->GetParameter(31)+TMath::Sqrt(fabs(fitPeak2->GetParameter(32))))), fabs(magPeak[4]-velCurve->Eval(fitPeak2->GetParameter(31)-TMath::Sqrt(fabs(fitPeak2->GetParameter(32))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[5]-velCurve->Eval(fitPeak2->GetParameter(20)+TMath::Sqrt(fabs(fitPeak2->GetParameter(21))))), fabs(magPeak[5]-velCurve->Eval(fitPeak2->GetParameter(20)-TMath::Sqrt(fabs(fitPeak2->GetParameter(21))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[6]-velCurve->Eval(fitPeak2->GetParameter(23)+TMath::Sqrt(fabs(fitPeak2->GetParameter(24))))), fabs(magPeak[6]-velCurve->Eval(fitPeak2->GetParameter(23)-TMath::Sqrt(fabs(fitPeak2->GetParameter(24))))))); 
+  magPeakUnc1.push_back(TMath::Max(fabs(magPeak[7]-velCurve->Eval(fitPeak2->GetParameter(26)+TMath::Sqrt(fabs(fitPeak2->GetParameter(27))))), fabs(magPeak[7]-velCurve->Eval(fitPeak2->GetParameter(26)-TMath::Sqrt(fabs(fitPeak2->GetParameter(27))))))); 
 
-    feoPeakUnc1.push_back(TMath::Max(fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))), fabs(feoPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))))); 
+  magPeakUnc2.push_back(fabs(magPeak[0]-velCurve2->Eval(fitPeak2->GetParameter(2)))); 
+  magPeakUnc2.push_back(fabs(magPeak[1]-velCurve2->Eval(fitPeak2->GetParameter(5)))); 
+  magPeakUnc2.push_back(fabs(magPeak[2]-velCurve2->Eval(fitPeak2->GetParameter(11)))); 
+  magPeakUnc2.push_back(fabs(magPeak[3]-velCurve2->Eval(fitPeak2->GetParameter(14)))); 
+  magPeakUnc2.push_back(fabs(magPeak[4]-velCurve2->Eval(fitPeak2->GetParameter(31)))); 
+  magPeakUnc2.push_back(fabs(magPeak[5]-velCurve2->Eval(fitPeak2->GetParameter(20)))); 
+  magPeakUnc2.push_back(fabs(magPeak[6]-velCurve2->Eval(fitPeak2->GetParameter(23)))); 
+  magPeakUnc2.push_back(fabs(magPeak[7]-velCurve2->Eval(fitPeak2->GetParameter(26)))); 
+
+  for (Int_t i=0; i<magPeak.size(); i++) {
+    magPeakUnc.push_back(TMath::Sqrt(magPeakUnc1[i]*magPeakUnc1[i]+magPeakUnc2[i]*magPeakUnc2[i]));
+
+    cout << magPeak[i] << " +- " << magPeakUnc1[i] << " +- " << magPeakUnc2[i] << endl;
+
+  }
+
+  /*  for (Int_t i=2; i<6; i++) {
+    magPeak.push_back(velCurve->Eval(fitPeak2->GetParameter(2+3*i)));
+
+    magPeakUnc1.push_back(TMath::Max(fabs(magPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)+TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))), fabs(magPeak[i]-velCurve->Eval(fitPeak2->GetParameter(2+3*i)-TMath::Sqrt(fabs(fitPeak2->GetParameter(3+3*i))))))); 
 
     if (i<3) {
       cout << velCurve2->Eval(fitPeak2->GetParameter(2+3*i)) << endl;
-      feoPeakUnc2.push_back(fabs(feoPeak[i]-velCurve2->Eval(fitPeak2->GetParameter(2+3*i))));
+      magPeakUnc2.push_back(fabs(magPeak[i]-velCurve2->Eval(fitPeak2->GetParameter(2+3*i))));
     }
     else {
       cout << velCurve3->Eval(fitPeak2->GetParameter(2+3*i)) << endl;
-      feoPeakUnc2.push_back(fabs(feoPeak[i]-velCurve3->Eval(fitPeak2->GetParameter(2+3*i))));
+      magPeakUnc2.push_back(fabs(magPeak[i]-velCurve3->Eval(fitPeak2->GetParameter(2+3*i))));
     }
-    feoPeakUnc.push_back(TMath::Sqrt(feoPeakUnc1[i]*feoPeakUnc1[i]+feoPeakUnc2[i]*feoPeakUnc2[i]));
+    magPeakUnc.push_back(TMath::Sqrt(magPeakUnc1[i]*magPeakUnc1[i]+magPeakUnc2[i]*magPeakUnc2[i]));
 
-    cout << feoPeak[i] << " +- " << feoPeakUnc1[i] << " +- " << feoPeakUnc2[i] << endl;
+    cout << magPeak[i] << " +- " << magPeakUnc1[i] << " +- " << magPeakUnc2[i] << endl;
   }
 
   //replace with weighted averages!
 
-  Double_t dE0_1 = fabs(feoPeak[3]-feoPeak[1]);
-  Double_t dE0_2 = fabs(feoPeak[4]-feoPeak[2]);
-  Double_t dE0unc_1 = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[1]*feoPeakUnc[1]);
-  Double_t dE0unc_2 = TMath::Sqrt(feoPeakUnc[4]*feoPeakUnc[4]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE0_1 = fabs(magPeak[3]-magPeak[1]);
+  Double_t dE0_2 = fabs(magPeak[4]-magPeak[2]);
+  Double_t dE0unc_1 = TMath::Sqrt(magPeakUnc[3]*magPeakUnc[3]+magPeakUnc[1]*magPeakUnc[1]);
+  Double_t dE0unc_2 = TMath::Sqrt(magPeakUnc[4]*magPeakUnc[4]+magPeakUnc[2]*magPeakUnc[2]);
   Double_t dE0 = (dE0_1/(dE0unc_1*dE0unc_1)+dE0_2/(dE0unc_2*dE0unc_2))/(1/(dE0unc_1*dE0unc_1)+1/(dE0unc_2*dE0unc_2));
   Double_t dE0unc = TMath::Sqrt(1/(1/(dE0unc_1*dE0unc_1)+1/(dE0unc_2*dE0unc_2)));
 
-  Double_t dE1_1 = fabs(feoPeak[4]-feoPeak[3]);
-  Double_t dE1_2 = fabs(feoPeak[2]-feoPeak[1]);
-  Double_t dE1unc_1 = TMath::Sqrt(feoPeakUnc[3]*feoPeakUnc[3]+feoPeakUnc[4]*feoPeakUnc[4]);
-  Double_t dE1unc_2 = TMath::Sqrt(feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[2]*feoPeakUnc[2]);
+  Double_t dE1_1 = fabs(magPeak[4]-magPeak[3]);
+  Double_t dE1_2 = fabs(magPeak[2]-magPeak[1]);
+  Double_t dE1unc_1 = TMath::Sqrt(magPeakUnc[3]*magPeakUnc[3]+magPeakUnc[4]*magPeakUnc[4]);
+  Double_t dE1unc_2 = TMath::Sqrt(magPeakUnc[1]*magPeakUnc[1]+magPeakUnc[2]*magPeakUnc[2]);
   Double_t dE1 = (dE1_1/(dE1unc_1*dE1unc_1)+dE1_2/(dE1unc_2*dE1unc_2))/(1/(dE1unc_1*dE1unc_1)+1/(dE1unc_2*dE1unc_2));
   Double_t dE1unc = TMath::Sqrt(1/(1/(dE1unc_1*dE1unc_1)+1/(dE1unc_2*dE1unc_2)));
 
-  Double_t q_1 = 0.5*fabs(fabs(feoPeak[1]-feoPeak[0])-dE1);
-  Double_t q_2 = 0.5*fabs(fabs(feoPeak[5]-feoPeak[4])-dE1);
-  Double_t qunc_1 = TMath::Sqrt(feoPeakUnc[1]*feoPeakUnc[1]+feoPeakUnc[0]*feoPeakUnc[0]+dE1unc*dE1unc);
-  Double_t qunc_2 = TMath::Sqrt(feoPeakUnc[5]*feoPeakUnc[5]+feoPeakUnc[4]*feoPeakUnc[4]+dE1unc*dE1unc);
+  Double_t q_1 = 0.5*fabs(fabs(magPeak[1]-magPeak[0])-dE1);
+  Double_t q_2 = 0.5*fabs(fabs(magPeak[5]-magPeak[4])-dE1);
+  Double_t qunc_1 = TMath::Sqrt(magPeakUnc[1]*magPeakUnc[1]+magPeakUnc[0]*magPeakUnc[0]+dE1unc*dE1unc);
+  Double_t qunc_2 = TMath::Sqrt(magPeakUnc[5]*magPeakUnc[5]+magPeakUnc[4]*magPeakUnc[4]+dE1unc*dE1unc);
   Double_t q = (q_1/(qunc_1*qunc_1)+q_2/(qunc_2*qunc_2))/(1/(qunc_1*qunc_1)+1/(qunc_2*qunc_2));
   Double_t qunc = TMath::Sqrt(1/(1/(qunc_1*qunc_1)+1/(qunc_2*qunc_2)));
 
@@ -234,10 +267,10 @@ void magnetite() {
   Double_t cLight=3e11;
 
   cout << "Fe2O3 deltaV [mm/s]" << endl;
-  cout << "dE1+2Q  = " << fabs(feoPeak[1]-feoPeak[0]) << endl;
-  cout << "dE1     = " << fabs(feoPeak[4]-feoPeak[3]) << endl;
-  cout << "dE1     = " << fabs(feoPeak[2]-feoPeak[1]) << endl;
-  cout << "dE1-2Q  = " << fabs(feoPeak[5]-feoPeak[4]) << endl;
+  cout << "dE1+2Q  = " << fabs(magPeak[1]-magPeak[0]) << endl;
+  cout << "dE1     = " << fabs(magPeak[4]-magPeak[3]) << endl;
+  cout << "dE1     = " << fabs(magPeak[2]-magPeak[1]) << endl;
+  cout << "dE1-2Q  = " << fabs(magPeak[5]-magPeak[4]) << endl;
   cout << "----------" << endl;
   cout << "dE0     = " << dE0 << " +- " << dE0unc << endl;
   cout << "dE1     = " << dE1 << " +- " << dE1unc << endl;
@@ -249,5 +282,5 @@ void magnetite() {
 
   cout << "mu1/mu0 = " << -3*dE1/dE0 << " +- " << -3*dE1/dE0*TMath::Sqrt((dE0unc*dE0unc)/(dE0*dE0)+(dE1unc*dE1unc)/(dE1*dE1)) << endl;
 
-
+    */
 }
