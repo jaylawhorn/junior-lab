@@ -1,0 +1,69 @@
+//----------------------------------------------------------------------------
+//
+// 
+// 
+// 
+//
+//----------------------------------------------------------------------------
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include <TROOT.h>
+#include <TSystem.h>
+#include <TFile.h>
+#include <TGaxis.h>
+#include <TMath.h>
+#include <TH1D.h>
+#include <TGraph.h>
+#include <TGraphErrors.h>
+#include <TLegend.h>
+#include <TStyle.h>
+#include <TString.h>
+#include <TCanvas.h>
+#include <TLine.h>
+#include <TBox.h>
+#include <TF1.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+
+//#include "plotStyle.hh"
+#endif
+
+void plot_times() {
+
+  TCanvas *c1 = new TCanvas("c1", "c1", 1600, 600);
+
+  ifstream ifs;
+  ifs.open("time_list.txt");
+  assert(ifs.is_open());
+  string line;
+
+  Int_t month, day, hour, min, sec;
+
+  vector<Int_t> times;
+  vector<Int_t> count;
+
+  while(getline(ifs,line)) {
+    if(line[0]=='#') continue;
+
+    stringstream ss(line);
+    ss >> month >> day >> hour >> min >> sec;
+
+    TDatime da(2014, month, day, hour, min, sec);
+    times.push_back(da.Convert());
+    count.push_back(1);
+  }
+
+  TGraph *gr = new TGraph(times.size(), &(times[0]), &(count[0]));
+  gr->SetMarkerStyle(20);
+
+  gr->GetXaxis()->SetTimeDisplay(1); 
+  gr->GetXaxis()->SetNdivisions(-503); 
+  gr->GetXaxis()->SetTimeFormat("%Y-%m-%d %H:%M"); 
+  gr->GetXaxis()->SetTimeOffset(0,"gmt"); 
+  gr->GetYaxis()->SetRangeUser(0.8,1.2);
+
+  gr->Draw("ap");
+
+}
