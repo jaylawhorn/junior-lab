@@ -1,0 +1,5 @@
+{
+
+  gROOT->Macro("plotStyle.cc++");
+
+}
